@@ -8,13 +8,16 @@ use CodeIgniter\HTTP\ResponseInterface;
 class Properties extends BaseController
 {
     /**
-     * Ensure properties table exists
+     * Ensure properties table exists and seed defaults if empty
      */
     protected function ensureTableExists($db)
     {
         try {
+            $driver = strtolower($db->getPlatform());
+            $pkSyntax = str_contains($driver, 'sqlite') ? 'INTEGER PRIMARY KEY AUTOINCREMENT' : 'INT AUTO_INCREMENT PRIMARY KEY';
+
             $db->query("CREATE TABLE IF NOT EXISTS properties (
-                id INT AUTO_INCREMENT PRIMARY KEY,
+                id {$pkSyntax},
                 title VARCHAR(255) NOT NULL,
                 description TEXT,
                 price DECIMAL(12,2) NOT NULL,
@@ -28,6 +31,51 @@ class Properties extends BaseController
                 image_url VARCHAR(500),
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )");
+
+            $builder = $db->table('properties');
+            if ($builder->countAllResults(false) === 0) {
+                $builder->insertBatch([
+                    [
+                        'title' => 'Luxury 3BHK Apartment in Prime Location',
+                        'price' => 12500000,
+                        'location' => 'City Center, Main Road',
+                        'category' => 'flat',
+                        'purpose' => 'sell',
+                        'property_type' => 'residential',
+                        'bedrooms' => 3,
+                        'bathrooms' => 3,
+                        'area' => 1850,
+                        'image_url' => 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
+                        'description' => 'Spacious 3BHK flat with modern amenities, 24/7 power backup, and dedicated parking.'
+                    ],
+                    [
+                        'title' => 'Premium NA Plot - Clear Title',
+                        'price' => 4500000,
+                        'location' => 'Green Valley, Phase 2',
+                        'category' => 'na_plot',
+                        'purpose' => 'sell',
+                        'property_type' => 'residential',
+                        'bedrooms' => 0,
+                        'bathrooms' => 0,
+                        'area' => 2400,
+                        'image_url' => 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80',
+                        'description' => 'Collector approved NA plot ready for immediate construction with electricity and water connection.'
+                    ],
+                    [
+                        'title' => 'Modern Commercial Office Space',
+                        'price' => 65000,
+                        'location' => 'Business Park, IT Hub',
+                        'category' => 'office',
+                        'purpose' => 'rent',
+                        'property_type' => 'commercial',
+                        'bedrooms' => 0,
+                        'bathrooms' => 2,
+                        'area' => 1200,
+                        'image_url' => 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
+                        'description' => 'Fully furnished office space suitable for IT companies, consultancies, or corporate branch.'
+                    ]
+                ]);
+            }
         } catch (\Throwable $e) {}
     }
 

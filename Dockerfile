@@ -1,12 +1,13 @@
 FROM php:8.2-apache
 
-# Install required PHP extensions for CodeIgniter 4 & MySQL
+# Install required PHP extensions for CodeIgniter 4, MySQL & SQLite
 RUN apt-get update && apt-get install -y \
     libicu-dev \
+    libsqlite3-dev \
     libzip-dev \
     zip \
     unzip \
-    && docker-php-ext-install intl pdo pdo_mysql mysqli zip \
+    && docker-php-ext-install intl pdo pdo_mysql pdo_sqlite mysqli zip \
     && rm -rf /var/lib/apt/lists/*
 
 # Enable Apache mod_rewrite

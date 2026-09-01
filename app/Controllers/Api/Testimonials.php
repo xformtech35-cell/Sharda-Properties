@@ -7,18 +7,58 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class Testimonials extends BaseController
 {
-    public function index(): ResponseInterface
+    protected function ensureTableExists($db)
     {
         try {
-            $db = \Config\Database::connect();
+            $driver = strtolower($db->getPlatform());
+            $pkSyntax = str_contains($driver, 'sqlite') ? 'INTEGER PRIMARY KEY AUTOINCREMENT' : 'INT AUTO_INCREMENT PRIMARY KEY';
+
             $db->query("CREATE TABLE IF NOT EXISTS testimonials (
-                id INT AUTO_INCREMENT PRIMARY KEY,
+                id {$pkSyntax},
                 name VARCHAR(255) NOT NULL,
                 role VARCHAR(255) NOT NULL,
                 rating INT DEFAULT 5,
                 content TEXT NOT NULL,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )");
+
+            $builder = $db->table('testimonials');
+            if ($builder->countAllResults(false) === 0) {
+                $builder->insertBatch([
+                    [
+                        'name' => 'Rajesh Kulkarni',
+                        'role' => 'Homeowner, City Center',
+                        'rating' => 5,
+                        'content' => 'Sharda Properties made our dream of owning a 3BHK flat completely seamless. Their documentation process was transparent and stress-free!'
+                    ],
+                    [
+                        'name' => 'Priya Sharma',
+                        'role' => 'Investor, NA Plot Owner',
+                        'rating' => 5,
+                        'content' => 'Finding an authentic NA plot with legal clearance can be tough. Sharda Properties provided clear title verification and smooth registration.'
+                    ],
+                    [
+                        'name' => 'Amit Mehta',
+                        'role' => 'Commercial Tenant',
+                        'rating' => 5,
+                        'content' => 'We leased a prime commercial office through Sharda Properties. Professional support and excellent negotiation!'
+                    ],
+                    [
+                        'name' => 'Sunil Joshi',
+                        'role' => 'NA Plot Buyer, Green Valley',
+                        'rating' => 5,
+                        'content' => 'Exceptional legal verification and plot layout planning. Highly recommended real estate consultancy!'
+                    ]
+                ]);
+            }
+        } catch (\Throwable $e) {}
+    }
+
+    public function index(): ResponseInterface
+    {
+        try {
+            $db = \Config\Database::connect();
+            $this->ensureTableExists($db);
             $testimonials = $db->table('testimonials')->orderBy('id', 'DESC')->get()->getResultArray();
         } catch (\Throwable $e) {
             $testimonials = [
@@ -42,13 +82,6 @@ class Testimonials extends BaseController
                     'role' => 'Commercial Tenant',
                     'rating' => 5,
                     'content' => 'We leased a prime commercial office through Sharda Properties. Professional support and excellent negotiation!'
-                ],
-                [
-                    'id' => 4,
-                    'name' => 'Sunil Joshi',
-                    'role' => 'NA Plot Buyer, Green Valley',
-                    'rating' => 5,
-                    'content' => 'Exceptional legal verification and plot layout planning. Highly recommended real estate consultancy!'
                 ]
             ];
         }
@@ -86,14 +119,7 @@ class Testimonials extends BaseController
 
         try {
             $db = \Config\Database::connect();
-            $db->query("CREATE TABLE IF NOT EXISTS testimonials (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(255) NOT NULL,
-                role VARCHAR(255) NOT NULL,
-                rating INT DEFAULT 5,
-                content TEXT NOT NULL,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            )");
+            $this->ensureTableExists($db);
             $db->table('testimonials')->insert($data);
             $data['id'] = $db->insertID();
         } catch (\Throwable $e) {
@@ -114,6 +140,7 @@ class Testimonials extends BaseController
 
         try {
             $db = \Config\Database::connect();
+            $this->ensureTableExists($db);
             $db->table('testimonials')->where('id', $id)->delete();
         } catch (\Throwable $e) {}
 
