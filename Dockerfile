@@ -20,8 +20,10 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2-
 # Copy project files
 COPY . /var/www/html/
 
-# Set appropriate directory permissions for CodeIgniter writable folder
-RUN chown -R www-data:www-data /var/www/html/writable
+# Create uploads and writable directories with full write permissions
+RUN mkdir -p /var/www/html/public/uploads /var/www/html/writable \
+    && chown -R www-data:www-data /var/www/html/public/uploads /var/www/html/writable \
+    && chmod -R 777 /var/www/html/public/uploads /var/www/html/writable
 
 EXPOSE 80
 CMD ["apache2-foreground"]

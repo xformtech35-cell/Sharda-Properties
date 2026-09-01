@@ -11,6 +11,14 @@ class Testimonials extends BaseController
     {
         try {
             $db = \Config\Database::connect();
+            $db->query("CREATE TABLE IF NOT EXISTS testimonials (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                role VARCHAR(255) NOT NULL,
+                rating INT DEFAULT 5,
+                content TEXT NOT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )");
             $testimonials = $db->table('testimonials')->orderBy('id', 'DESC')->get()->getResultArray();
         } catch (\Throwable $e) {
             $testimonials = [
@@ -59,7 +67,7 @@ class Testimonials extends BaseController
 
         if (empty($name) || empty($role) || empty($content)) {
             return $this->response->setJSON([
-                'error' => 'Name, role, and content are required'
+                'error' => 'Name, role, and content are required fields.'
             ])->setStatusCode(400);
         }
 
@@ -73,6 +81,14 @@ class Testimonials extends BaseController
 
         try {
             $db = \Config\Database::connect();
+            $db->query("CREATE TABLE IF NOT EXISTS testimonials (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                role VARCHAR(255) NOT NULL,
+                rating INT DEFAULT 5,
+                content TEXT NOT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )");
             $db->table('testimonials')->insert($data);
             $data['id'] = $db->insertID();
         } catch (\Throwable $e) {
