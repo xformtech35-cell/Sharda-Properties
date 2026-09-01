@@ -103,6 +103,13 @@ if (!function_exists('get_google_map_embed_src')) {
     }
 }
 
+$directMapUrl = '';
+if (!empty($property['google_map'])) {
+    $directMapUrl = str_starts_with($property['google_map'], 'http') ? $property['google_map'] : 'https://www.google.com/maps/search/?api=1&query=' . urlencode($property['google_map']);
+} else if (!empty($property['location'])) {
+    $directMapUrl = 'https://www.google.com/maps/search/?api=1&query=' . urlencode($property['location']);
+}
+
 $meta_title = htmlspecialchars($property['title']) . ' in ' . htmlspecialchars($property['location']) . ' | Sharda Properties';
 $meta_description = htmlspecialchars(substr(strip_tags($property['description'] ?? ''), 0, 160));
 $meta_image = get_image_url($property['image_url']);
@@ -141,9 +148,16 @@ require_once APPPATH . 'Views/layouts/header.php';
                     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                         <div>
                             <h1 class="text-2xl sm:text-3xl font-bold text-gray-900"><?= htmlspecialchars($property['title']) ?></h1>
-                            <div class="flex items-center text-gray-500 mt-2">
-                                <i data-lucide="map-pin" class="h-5 w-5 mr-1.5 text-gray-400 shrink-0"></i>
-                                <span><?= htmlspecialchars($property['location']) ?></span>
+                            <div class="flex flex-wrap items-center gap-3 text-gray-500 mt-2">
+                                <div class="flex items-center">
+                                    <i data-lucide="map-pin" class="h-5 w-5 mr-1.5 text-indigo-600 shrink-0"></i>
+                                    <span class="font-medium text-gray-700"><?= htmlspecialchars($property['location']) ?></span>
+                                </div>
+                                <?php if (!empty($directMapUrl)): ?>
+                                <a href="<?= htmlspecialchars($directMapUrl) ?>" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1 rounded-full transition-colors shadow-2xs">
+                                    <i data-lucide="external-link" class="h-3.5 w-3.5"></i> Open in Google Maps
+                                </a>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="text-3xl font-extrabold text-indigo-600 whitespace-nowrap">
@@ -192,9 +206,16 @@ require_once APPPATH . 'Views/layouts/header.php';
                     if ($mapSrc): 
                     ?>
                     <div class="border-t border-gray-100 pt-6 space-y-3">
-                        <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
-                            <i data-lucide="map-pin" class="h-5 w-5 text-indigo-600"></i> Property Location Map
-                        </h3>
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                                <i data-lucide="map-pin" class="h-5 w-5 text-indigo-600"></i> Property Location Map
+                            </h3>
+                            <?php if (!empty($directMapUrl)): ?>
+                            <a href="<?= htmlspecialchars($directMapUrl) ?>" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-indigo-600 hover:underline inline-flex items-center gap-1">
+                                Open full map <i data-lucide="external-link" class="h-3.5 w-3.5"></i>
+                            </a>
+                            <?php endif; ?>
+                        </div>
                         <div class="h-[350px] w-full rounded-xl overflow-hidden border border-gray-200 shadow-sm relative bg-gray-50">
                             <iframe
                                 src="<?= esc($mapSrc) ?>"
