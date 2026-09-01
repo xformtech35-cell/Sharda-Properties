@@ -29,8 +29,14 @@ class Properties extends BaseController
                 bathrooms INT DEFAULT 1,
                 area INT DEFAULT 1000,
                 image_url VARCHAR(500),
+                google_map TEXT NULL,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )");
+
+            // Try adding google_map column if table exists without it
+            try {
+                $db->query("ALTER TABLE properties ADD COLUMN google_map TEXT NULL");
+            } catch (\Throwable $ex) {}
 
             $builder = $db->table('properties');
             if ($builder->countAllResults(false) === 0) {
@@ -46,6 +52,7 @@ class Properties extends BaseController
                         'bathrooms' => 3,
                         'area' => 1850,
                         'image_url' => 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
+                        'google_map' => 'https://maps.google.com/maps?q=Mumbai&output=embed',
                         'description' => 'Spacious 3BHK flat with modern amenities, 24/7 power backup, and dedicated parking.'
                     ],
                     [
@@ -59,6 +66,7 @@ class Properties extends BaseController
                         'bathrooms' => 0,
                         'area' => 2400,
                         'image_url' => 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80',
+                        'google_map' => '',
                         'description' => 'Collector approved NA plot ready for immediate construction with electricity and water connection.'
                     ],
                     [
@@ -72,6 +80,7 @@ class Properties extends BaseController
                         'bathrooms' => 2,
                         'area' => 1200,
                         'image_url' => 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
+                        'google_map' => 'https://maps.google.com/maps?q=Pune&output=embed',
                         'description' => 'Fully furnished office space suitable for IT companies, consultancies, or corporate branch.'
                     ]
                 ]);
@@ -145,6 +154,7 @@ class Properties extends BaseController
                     'bathrooms' => 3,
                     'area' => 1850,
                     'image_url' => 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
+                    'google_map' => 'https://maps.google.com/maps?q=Mumbai&output=embed',
                     'description' => 'Spacious 3BHK flat with modern amenities, 24/7 power backup, and dedicated parking.'
                 ],
                 [
@@ -159,21 +169,8 @@ class Properties extends BaseController
                     'bathrooms' => 0,
                     'area' => 2400,
                     'image_url' => 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80',
+                    'google_map' => '',
                     'description' => 'Collector approved NA plot ready for immediate construction with electricity and water connection.'
-                ],
-                [
-                    'id' => 3,
-                    'title' => 'Modern Commercial Office Space',
-                    'price' => 65000,
-                    'location' => 'Business Park, IT Hub',
-                    'category' => 'office',
-                    'purpose' => 'rent',
-                    'property_type' => 'commercial',
-                    'bedrooms' => 0,
-                    'bathrooms' => 2,
-                    'area' => 1200,
-                    'image_url' => 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
-                    'description' => 'Fully furnished office space suitable for IT companies, consultancies, or corporate branch.'
                 ]
             ];
         }
@@ -207,6 +204,7 @@ class Properties extends BaseController
                 'bathrooms' => 3,
                 'area' => 1850,
                 'image_url' => 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
+                'google_map' => 'https://maps.google.com/maps?q=Mumbai&output=embed',
                 'description' => 'Spacious 3BHK flat with modern amenities, 24/7 power backup, and dedicated parking.'
             ];
         }
@@ -234,6 +232,7 @@ class Properties extends BaseController
             $bathrooms    = $this->request->getPost('bathrooms') ?: 1;
             $area         = $this->request->getPost('area') ?: 1000;
             $description  = $this->request->getPost('description') ?: '';
+            $googleMap    = $this->request->getPost('google_map') ?: '';
 
             if (empty($title) || empty($price) || empty($location)) {
                 return $this->response->setJSON([
@@ -269,6 +268,7 @@ class Properties extends BaseController
                 'bathrooms'     => (int)$bathrooms,
                 'area'          => (int)$area,
                 'image_url'     => $imageUrl,
+                'google_map'    => $googleMap,
                 'created_at'    => date('Y-m-d H:i:s')
             ];
 
@@ -302,16 +302,17 @@ class Properties extends BaseController
         }
 
         try {
-            $postTitle = $this->request->getPost('title');
-            $postPrice = $this->request->getPost('price');
-            $postLoc   = $this->request->getPost('location');
-            $postCat   = $this->request->getPost('category');
-            $postPurp  = $this->request->getPost('purpose');
-            $postPropT = $this->request->getPost('property_type');
-            $postBeds  = $this->request->getPost('bedrooms');
-            $postBaths = $this->request->getPost('bathrooms');
-            $postArea  = $this->request->getPost('area');
-            $postDesc  = $this->request->getPost('description');
+            $postTitle     = $this->request->getPost('title');
+            $postPrice     = $this->request->getPost('price');
+            $postLoc       = $this->request->getPost('location');
+            $postCat       = $this->request->getPost('category');
+            $postPurp      = $this->request->getPost('purpose');
+            $postPropT     = $this->request->getPost('property_type');
+            $postBeds      = $this->request->getPost('bedrooms');
+            $postBaths     = $this->request->getPost('bathrooms');
+            $postArea      = $this->request->getPost('area');
+            $postDesc      = $this->request->getPost('description');
+            $postGoogleMap = $this->request->getPost('google_map');
 
             $data = [
                 'title'         => $postTitle ?: 'Updated Property',
@@ -324,6 +325,7 @@ class Properties extends BaseController
                 'bedrooms'      => (int)($postBeds ?: 1),
                 'bathrooms'     => (int)($postBaths ?: 1),
                 'area'          => (int)($postArea ?: 1000),
+                'google_map'    => $postGoogleMap !== null ? $postGoogleMap : '',
             ];
 
             // Handle image upload safely

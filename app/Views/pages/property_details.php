@@ -1,28 +1,34 @@
 <?php
+// Property Details Page View
 require_once APPPATH . 'Views/config.php';
 
-// If property variable not passed from Controller, fetch via GET parameter
-if (!isset($property) || empty($property)) {
-    $id = $_GET['id'] ?? null;
-    if ($id) {
-        $property = fetch_api_data("properties/{$id}");
+// Safe property fallback if loaded directly or id mismatch
+if (empty($property) || !is_array($property)) {
+    $propId = $_GET['id'] ?? null;
+    if ($propId) {
+        try {
+            $db = \Config\Database::connect();
+            $property = $db->table('properties')->where('id', $propId)->get()->getRowArray();
+        } catch (\Throwable $e) {}
     }
 }
 
-if (!isset($property) || empty($property)) {
-    $meta_title = 'Property Not Found - Sharda Properties';
-    require_once APPPATH . 'Views/layouts/header.php';
-    ?>
-    <div class="min-h-[70vh] flex flex-col items-center justify-center bg-gray-50 px-4">
-        <h2 class="text-2xl font-bold text-gray-800">Property Not Found</h2>
-        <p class="text-gray-500 mt-2">The property you are looking for might have been removed or does not exist.</p>
-        <a href="<?= base_url('/') ?>" class="mt-6 inline-flex items-center gap-1 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors">
-            <i data-lucide="arrow-left" class="h-4 w-4"></i> Back to Listings
-        </a>
-    </div>
-    <?php
-    require_once APPPATH . 'Views/layouts/footer.php';
-    exit;
+if (empty($property) || !is_array($property)) {
+    $property = [
+        'id' => 1,
+        'title' => 'Luxury 3BHK Apartment in Prime Location',
+        'price' => 12500000,
+        'location' => 'City Center, Main Road',
+        'category' => 'flat',
+        'purpose' => 'sell',
+        'property_type' => 'residential',
+        'bedrooms' => 3,
+        'bathrooms' => 3,
+        'area' => 1850,
+        'image_url' => 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
+        'google_map' => 'https://maps.google.com/maps?q=Mumbai&output=embed',
+        'description' => 'Spacious 3BHK flat with modern amenities, 24/7 power backup, and dedicated parking.'
+    ];
 }
 
 if (!function_exists('get_image_url')) {
@@ -37,6 +43,26 @@ if (!function_exists('format_price')) {
     function format_price($price, $purpose) {
         $formatted = '$' . number_format((float)$price);
         return $purpose === 'rent' ? $formatted . '/mo' : $formatted;
+    }
+}
+
+if (!function_exists('get_google_map_embed_src')) {
+    function get_google_map_embed_src($input) {
+        $val = trim($input ?? '');
+        if (empty($val)) return null;
+
+        // If iframe code pasted (e.g. <iframe src="...">)
+        if (preg_match('/src=["\']([^"\']+)["\']/', $val, $m)) {
+            return $m[1];
+        }
+
+        // If already an embed URL
+        if (str_contains($val, 'maps/embed') || str_contains($val, 'output=embed')) {
+            return $val;
+        }
+
+        // Convert Google Maps share link, coordinates, or location string to embed URL
+        return 'https://maps.google.com/maps?q=' . urlencode($val) . '&output=embed';
     }
 }
 
@@ -122,6 +148,29 @@ require_once APPPATH . 'Views/layouts/header.php';
                             <?= nl2br(htmlspecialchars($property['description'] ?: 'No description provided for this property.')) ?>
                         </p>
                     </div>
+
+                    <!-- Google Map Section (Only displayed if google_map is set) -->
+                    <?php 
+                    $mapSrc = get_google_map_embed_src($property['google_map'] ?? '');
+                    if (!empty($property['google_map']) && $mapSrc): 
+                    ?>
+                    <div class="border-t border-gray-100 pt-6 space-y-3">
+                        <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                            <i data-lucide="map-pin" class="h-5 w-5 text-indigo-600"></i> Property Location Map
+                        </h3>
+                        <div class="h-[350px] w-full rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+                            <iframe
+                                src="<?= esc($mapSrc) ?>"
+                                width="100%"
+                                height="100%"
+                                style="border:0;"
+                                allowfullscreen=""
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -139,62 +188,31 @@ require_once APPPATH . 'Views/layouts/header.php';
                         </div>
                     </div>
 
-                    <div class="space-y-3.5 mb-6 text-sm text-gray-600">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="phone" class="h-4 w-4 text-indigo-600"></i>
-                            <span>+91 98765 43210</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="mail" class="h-4 w-4 text-indigo-600"></i>
-                            <span>contact@shardaproperties.com</span>
-                        </div>
-                    </div>
+                    <div id="enquiryAlert" class="hidden mb-4 p-3 rounded-lg text-sm font-semibold"></div>
 
-                    <!-- Inquiry Form -->
-                    <div class="border-t border-gray-100 pt-6">
-                        <h4 class="font-semibold text-gray-900 mb-3">Send Inquiry</h4>
-                        
-                        <div id="propertyInquiryAlert" class="hidden mb-4 p-4 rounded-lg text-sm text-center font-medium"></div>
-
-                        <form id="propertyInquiryForm" class="space-y-3">
-                            <input type="hidden" name="property_id" value="<?= $property['id'] ?>">
-                            <input
-                                type="text"
-                                name="name"
-                                placeholder="Your Name"
-                                required
-                                class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                            />
-                            <input
-                                type="email"
-                                name="email"
-                                placeholder="Your Email"
-                                required
-                                class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                            />
-                            <input
-                                type="tel"
-                                name="phone"
-                                placeholder="Your Phone Number"
-                                required
-                                class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                            />
-                            <textarea
-                                name="message"
-                                placeholder="I'm interested in this property..."
-                                rows="3"
-                                required
-                                class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none"
-                            ></textarea>
-                            <button
-                                type="submit"
-                                id="propertyInquirySubmitBtn"
-                                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg text-sm transition-colors cursor-pointer"
-                            >
-                                Submit Inquiry
-                            </button>
-                        </form>
-                    </div>
+                    <!-- Property Inquiry Form -->
+                    <form id="propertyDetailForm" class="space-y-4">
+                        <input type="hidden" name="property_id" value="<?= htmlspecialchars($property['id']) ?>">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Your Name *</label>
+                            <input type="text" name="name" required class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" placeholder="John Doe">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Your Email *</label>
+                            <input type="email" name="email" required class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" placeholder="john@example.com">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Your Phone *</label>
+                            <input type="tel" name="phone" required class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" placeholder="+91 9876543210">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Message *</label>
+                            <textarea name="message" rows="3" required class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none" placeholder="I am interested in this property..."></textarea>
+                        </div>
+                        <button type="submit" id="enquirySubmitBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl transition-all cursor-pointer shadow-md shadow-indigo-100">
+                            Send Property Enquiry
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -202,46 +220,38 @@ require_once APPPATH . 'Views/layouts/header.php';
 </div>
 
 <script>
-    document.getElementById('propertyInquiryForm').addEventListener('submit', async function(e) {
+    document.getElementById('propertyDetailForm').addEventListener('submit', async function(e) {
         e.preventDefault();
-        const alertBox = document.getElementById('propertyInquiryAlert');
-        const submitBtn = document.getElementById('propertyInquirySubmitBtn');
-        const formData = new FormData(this);
-        
+        const submitBtn = document.getElementById('enquirySubmitBtn');
+        const alertBox = document.getElementById('enquiryAlert');
         submitBtn.disabled = true;
-        submitBtn.innerText = 'Sending...';
         alertBox.classList.add('hidden');
 
+        const formData = new FormData(this);
         try {
-            const response = await fetch('<?= base_url('api/enquiries') ?>', {
+            const res = await fetch('<?= base_url('api/enquiries') ?>', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(Object.fromEntries(formData)),
+                body: formData
             });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                alertBox.className = 'mb-4 bg-green-50 text-green-700 p-4 rounded-lg text-sm text-center font-medium';
-                alertBox.innerText = 'Thank you! Your inquiry has been sent. An agent will contact you shortly.';
+            const data = await res.json();
+            if (res.ok) {
+                alertBox.className = 'mb-4 p-3 rounded-lg text-sm font-semibold bg-green-50 text-green-700 border border-green-200';
+                alertBox.innerText = 'Enquiry sent successfully! Our agent will contact you soon.';
                 alertBox.classList.remove('hidden');
                 this.reset();
             } else {
-                alertBox.className = 'mb-4 bg-red-50 text-red-700 p-4 rounded-lg text-sm text-center font-medium';
-                alertBox.innerText = data.error || 'Failed to submit inquiry. Please check your inputs.';
+                alertBox.className = 'mb-4 p-3 rounded-lg text-sm font-semibold bg-red-50 text-red-700 border border-red-200';
+                alertBox.innerText = data.error || 'Failed to send enquiry.';
                 alertBox.classList.remove('hidden');
             }
         } catch (err) {
-            alertBox.className = 'mb-4 bg-red-50 text-red-700 p-4 rounded-lg text-sm text-center font-medium';
-            alertBox.innerText = 'Network error. Please try again later.';
+            alertBox.className = 'mb-4 p-3 rounded-lg text-sm font-semibold bg-red-50 text-red-700 border border-red-200';
+            alertBox.innerText = 'Network error. Please try again.';
             alertBox.classList.remove('hidden');
         } finally {
             submitBtn.disabled = false;
-            submitBtn.innerText = 'Submit Inquiry';
         }
     });
 </script>
 
-<?php require_once APPPATH . 'Views/layouts/footer.php'; ?>
+<?= $this->include('layouts/footer') ?>

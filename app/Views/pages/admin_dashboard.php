@@ -239,6 +239,12 @@
                 </div>
 
                 <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Google Map Embed Link / Location (Optional)</label>
+                    <input type="text" id="propGoogleMap" name="google_map" class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" placeholder="e.g. https://maps.google.com/maps?q=Mumbai&output=embed or location name">
+                    <p class="text-xs text-gray-400 mt-1">Paste Google Map embed URL, share link, or location name. Leave empty to hide map on property details page.</p>
+                </div>
+
+                <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Property Image</label>
                     <input type="file" id="propImage" name="image" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
                     <p class="text-xs text-gray-400 mt-1">Leave empty when editing to keep the existing image.</p>
@@ -420,6 +426,7 @@
         document.getElementById('propBedrooms').value = p.bedrooms || 1;
         document.getElementById('propBathrooms').value = p.bathrooms || 1;
         document.getElementById('propArea').value = p.area || 1000;
+        document.getElementById('propGoogleMap').value = p.google_map || '';
         document.getElementById('propDescription').value = p.description || '';
 
         const alertBox = document.getElementById('formErrorAlert');
@@ -598,6 +605,7 @@
         document.getElementById('modalTitle').innerText = 'Add Property';
         document.getElementById('editPropertyId').value = '';
         document.getElementById('propertyForm').reset();
+        document.getElementById('propGoogleMap').value = '';
         const alertBox = document.getElementById('formErrorAlert');
         if (alertBox) alertBox.classList.add('hidden');
         propModal.classList.remove('hidden');
@@ -634,6 +642,7 @@
                 propModal.classList.add('hidden');
                 this.reset();
                 document.getElementById('editPropertyId').value = '';
+                document.getElementById('propGoogleMap').value = '';
                 loadProperties();
             } else {
                 const errStr = data.errors ? Object.values(data.errors).join(', ') : (data.error || 'Error saving property');
