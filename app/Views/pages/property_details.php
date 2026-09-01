@@ -26,7 +26,7 @@ if (empty($property) || !is_array($property)) {
         'bathrooms' => 3,
         'area' => 1850,
         'image_url' => 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
-        'google_map' => 'https://maps.google.com/maps?q=City+Center+Main+Road&t=&z=15&ie=UTF8&iwloc=&output=embed',
+        'google_map' => 'City Center, Main Road',
         'description' => 'Spacious 3BHK flat with modern amenities, 24/7 power backup, and dedicated parking.'
     ];
 }
@@ -86,7 +86,12 @@ if (!function_exists('get_google_map_embed_src')) {
             } catch (\Throwable $e) {}
         }
 
-        // 4. Clean search query (if custom map input is empty, fallback to location)
+        // 4. Prevent raw URLs from being passed into q= parameter (prevents world map & KML warning)
+        if (str_starts_with($val, 'http://') || str_starts_with($val, 'https://')) {
+            $val = trim($location ?? '');
+        }
+
+        // 5. Final query string
         $query = !empty($val) ? $val : trim($location ?? '');
         if (empty($query)) return null;
 
