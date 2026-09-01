@@ -55,16 +55,41 @@ if (!function_exists('get_google_map_embed_src')) {
             return $m[1];
         }
 
-        // 2. If it's already an official Google Maps embed URL
+        // 2. If official Google Maps embed URL
         if (str_contains($val, 'maps/embed') && str_contains($val, 'pb=')) {
             return $val;
         }
 
-        // 3. Clean search query (if custom map input is empty or a plain string, fallback to location)
+        // 3. If Google Maps short link (maps.app.goo.gl or goo.gl/maps)
+        if (str_contains($val, 'goo.gl')) {
+            try {
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $val);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 4);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
+                $html = curl_exec($ch);
+                curl_close($ch);
+
+                if ($html) {
+                    if (preg_match('/[?&]q=([^&"\'<>]+)/i', $html, $m)) {
+                        $val = urldecode($m[1]);
+                    } elseif (preg_match('/<title>(.*?)<\/title>/i', $html, $m)) {
+                        $cleanTitle = trim(str_ireplace(['- Google Maps', 'Google Maps'], '', $m[1]));
+                        if (!empty($cleanTitle)) {
+                            $val = $cleanTitle;
+                        }
+                    }
+                }
+            } catch (\Throwable $e) {}
+        }
+
+        // 4. Clean search query (if custom map input is empty, fallback to location)
         $query = !empty($val) ? $val : trim($location ?? '');
         if (empty($query)) return null;
 
-        // Clean embed URL format without KML/MyMaps warning banners
         return 'https://maps.google.com/maps?q=' . urlencode($query) . '&t=&z=15&ie=UTF8&iwloc=&output=embed';
     }
 }
