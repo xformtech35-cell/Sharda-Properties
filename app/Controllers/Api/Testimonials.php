@@ -2,14 +2,12 @@
 
 namespace App\Controllers\Api;
 
-use CodeIgniter\RESTful\ResourceController;
+use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class Testimonials extends ResourceController
+class Testimonials extends BaseController
 {
-    protected $format = 'json';
-
-    public function index()
+    public function index(): ResponseInterface
     {
         try {
             $db = \Config\Database::connect();
@@ -47,27 +45,29 @@ class Testimonials extends ResourceController
             ];
         }
 
-        return $this->respond($testimonials);
+        return $this->response->setJSON($testimonials);
     }
 
-    public function create()
+    public function create(): ResponseInterface
     {
-        $rules = [
-            'name'    => 'required|min_length[2]',
-            'role'    => 'required|min_length[2]',
-            'rating'  => 'required|integer|greater_than_equal_to[1]|less_than_equal_to[5]',
-            'content' => 'required|min_length[5]'
-        ];
+        $json = $this->request->getJSON();
+        
+        $name    = $json->name ?? $this->request->getPost('name');
+        $role    = $json->role ?? $this->request->getPost('role');
+        $rating  = $json->rating ?? $this->request->getPost('rating');
+        $content = $json->content ?? $this->request->getPost('content');
 
-        if (!$this->validate($rules)) {
-            return $this->failValidationErrors($this->validator->getErrors());
+        if (empty($name) || empty($role) || empty($content)) {
+            return $this->response->setJSON([
+                'error' => 'Name, role, and content are required'
+            ])->setStatusCode(400);
         }
 
         $data = [
-            'name'       => $this->request->getPost('name'),
-            'role'       => $this->request->getPost('role'),
-            'rating'     => (int)$this->request->getPost('rating'),
-            'content'    => $this->request->getPost('content'),
+            'name'       => $name,
+            'role'       => $role,
+            'rating'     => (int)($rating ?: 5),
+            'content'    => $content,
             'created_at' => date('Y-m-d H:i:s')
         ];
 
@@ -79,13 +79,16 @@ class Testimonials extends ResourceController
             $data['id'] = rand(10, 999);
         }
 
-        return $this->respondCreated(['message' => 'Testimonial added successfully', 'data' => $data]);
+        return $this->response->setJSON([
+            'message' => 'Testimonial added successfully',
+            'data' => $data
+        ])->setStatusCode(201);
     }
 
-    public function delete($id = null)
+    public function delete($id = null): ResponseInterface
     {
         if (!$id) {
-            return $this->fail('Testimonial ID is required.');
+            return $this->response->setJSON(['error' => 'Testimonial ID is required'])->setStatusCode(400);
         }
 
         try {
@@ -93,6 +96,8 @@ class Testimonials extends ResourceController
             $db->table('testimonials')->where('id', $id)->delete();
         } catch (\Throwable $e) {}
 
-        return $this->respondDeleted(['message' => 'Testimonial deleted successfully']);
+        return $this->response->setJSON([
+            'message' => 'Testimonial deleted successfully'
+        ]);
     }
 }
