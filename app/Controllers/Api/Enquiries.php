@@ -12,37 +12,45 @@ class Enquiries extends BaseController
      */
     public function create(): ResponseInterface
     {
-        $rules = [
-            'name'        => 'required|min_length[2]|max_length[100]',
-            'email'       => 'required|valid_email|max_length[100]',
-            'phone'       => 'required|min_length[7]|max_length[20]',
-            'message'     => 'required|min_length[5]',
-            'property_id' => 'permit_empty|integer',
-        ];
-
-        $json = $this->request->getJSON();
-        $data = [
-            'name'        => $json->name ?? $this->request->getPost('name'),
-            'email'       => $json->email ?? $this->request->getPost('email'),
-            'phone'       => $json->phone ?? $this->request->getPost('phone'),
-            'message'     => $json->message ?? $this->request->getPost('message'),
-            'property_id' => $json->property_id ?? $this->request->getPost('property_id'),
-        ];
-
-        if (empty($data['property_id'])) {
-            $data['property_id'] = null;
+        $json = null;
+        try {
+            $json = $this->request->getJSON();
+        } catch (\Throwable $e) {
+            $json = null;
         }
 
-        $validation = \Config\Services::validation();
-        $validation->setRules($rules);
-        if (!$validation->run($data)) {
+        $name       = ($json && isset($json->name)) ? $json->name : $this->request->getPost('name');
+        $email      = ($json && isset($json->email)) ? $json->email : $this->request->getPost('email');
+        $phone      = ($json && isset($json->phone)) ? $json->phone : $this->request->getPost('phone');
+        $message    = ($json && isset($json->message)) ? $json->message : $this->request->getPost('message');
+        $propertyId = ($json && isset($json->property_id)) ? $json->property_id : $this->request->getPost('property_id');
+
+        if (empty($name) || empty($email) || empty($phone) || empty($message)) {
             return $this->response->setJSON([
-                'errors' => $validation->getErrors()
+                'error' => 'Name, email, phone, and message are required fields.'
             ])->setStatusCode(400);
         }
 
+        $data = [
+            'name'        => $name,
+            'email'       => $email,
+            'phone'       => $phone,
+            'message'     => $message,
+            'property_id' => !empty($propertyId) ? (int)$propertyId : null,
+            'created_at'  => date('Y-m-d H:i:s')
+        ];
+
         try {
             $db = \Config\Database::connect();
+            $db->query("CREATE TABLE IF NOT EXISTS enquiries (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(100) NOT NULL,
+                email VARCHAR(100) NOT NULL,
+                phone VARCHAR(20) NOT NULL,
+                message TEXT NOT NULL,
+                property_id INT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )");
             $db->table('enquiries')->insert($data);
         } catch (\Throwable $e) {}
 
@@ -60,6 +68,15 @@ class Enquiries extends BaseController
 
         try {
             $db = \Config\Database::connect();
+            $db->query("CREATE TABLE IF NOT EXISTS enquiries (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(100) NOT NULL,
+                email VARCHAR(100) NOT NULL,
+                phone VARCHAR(20) NOT NULL,
+                message TEXT NOT NULL,
+                property_id INT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )");
             $builder = $db->table('enquiries')
                 ->select('enquiries.*, properties.title as property_title')
                 ->join('properties', 'properties.id = enquiries.property_id', 'left');

@@ -58,12 +58,17 @@ class Testimonials extends BaseController
 
     public function create(): ResponseInterface
     {
-        $json = $this->request->getJSON();
-        
-        $name    = $json->name ?? $this->request->getPost('name');
-        $role    = $json->role ?? $this->request->getPost('role');
-        $rating  = $json->rating ?? $this->request->getPost('rating');
-        $content = $json->content ?? $this->request->getPost('content');
+        $json = null;
+        try {
+            $json = $this->request->getJSON();
+        } catch (\Throwable $e) {
+            $json = null;
+        }
+
+        $name    = ($json && isset($json->name)) ? $json->name : $this->request->getPost('name');
+        $role    = ($json && isset($json->role)) ? $json->role : $this->request->getPost('role');
+        $rating  = ($json && isset($json->rating)) ? $json->rating : $this->request->getPost('rating');
+        $content = ($json && isset($json->content)) ? $json->content : $this->request->getPost('content');
 
         if (empty($name) || empty($role) || empty($content)) {
             return $this->response->setJSON([

@@ -12,10 +12,15 @@ class Auth extends BaseController
      */
     public function login(): ResponseInterface
     {
-        $json = $this->request->getJSON();
+        $json = null;
+        try {
+            $json = $this->request->getJSON();
+        } catch (\Throwable $e) {
+            $json = null;
+        }
         
-        $email = $json->email ?? $this->request->getPost('email');
-        $password = $json->password ?? $this->request->getPost('password');
+        $email    = ($json && isset($json->email)) ? $json->email : $this->request->getPost('email');
+        $password = ($json && isset($json->password)) ? $json->password : $this->request->getPost('password');
 
         if (empty($email) || empty($password)) {
             return $this->response->setJSON([
