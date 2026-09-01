@@ -74,6 +74,10 @@ if (!function_exists('get_google_map_embed_src')) {
                 curl_close($ch);
 
                 if ($html) {
+                    // Extract exact pin coordinates !3dLat!4dLng
+                    if (preg_match('/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/', $html, $m)) {
+                        return 'https://maps.google.com/maps?q=' . $m[1] . ',' . $m[2] . '&t=&z=16&ie=UTF8&iwloc=&output=embed';
+                    }
                     if (preg_match('/[?&]q=([^&"\'<>]+)/i', $html, $m)) {
                         $val = urldecode($m[1]);
                     } elseif (preg_match('/<title>(.*?)<\/title>/i', $html, $m)) {
@@ -86,7 +90,7 @@ if (!function_exists('get_google_map_embed_src')) {
             } catch (\Throwable $e) {}
         }
 
-        // 4. Prevent raw URLs from being passed into q= parameter (prevents world map & KML warning)
+        // 4. Prevent raw URLs from being passed into q= parameter
         if (str_starts_with($val, 'http://') || str_starts_with($val, 'https://')) {
             $val = trim($location ?? '');
         }
@@ -95,7 +99,7 @@ if (!function_exists('get_google_map_embed_src')) {
         $query = !empty($val) ? $val : trim($location ?? '');
         if (empty($query)) return null;
 
-        return 'https://maps.google.com/maps?q=' . urlencode($query) . '&t=&z=15&ie=UTF8&iwloc=&output=embed';
+        return 'https://maps.google.com/maps?q=' . urlencode($query) . '&t=&z=16&ie=UTF8&iwloc=&output=embed';
     }
 }
 
