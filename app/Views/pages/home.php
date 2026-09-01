@@ -48,30 +48,9 @@ $params = array_filter([
     'location' => $location,
 ]);
 
-// mock fetch_api_data – keep original structure
-if (!function_exists('fetch_api_data')) {
-    function fetch_api_data($endpoint, $params = []) {
-        if ($endpoint === 'properties') {
-            return [
-                ['id' => 1, 'title' => 'Sunset Vista 3BHK', 'price' => 725000, 'purpose' => 'sell', 'category' => 'flat', 'image_url' => 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80', 'location' => 'Green Valley, Mumbai', 'bedrooms' => 3, 'bathrooms' => 2, 'area' => 1450],
-                ['id' => 2, 'title' => 'Commercial Hub Office', 'price' => 1250, 'purpose' => 'rent', 'category' => 'office', 'image_url' => 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80', 'location' => 'Airport Road, Pune', 'bedrooms' => 0, 'bathrooms' => 2, 'area' => 2200],
-                ['id' => 3, 'title' => 'NA Plot - 2400 sqft', 'price' => 480000, 'purpose' => 'sell', 'category' => 'na_plot', 'image_url' => 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80', 'location' => 'Green Valley, Ahmedabad', 'bedrooms' => 0, 'bathrooms' => 0, 'area' => 2400],
-                ['id' => 4, 'title' => 'Luxury Resale 2BHK', 'price' => 350000, 'purpose' => 'sell', 'category' => 'flat', 'image_url' => 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', 'location' => 'Metro Central, Delhi', 'bedrooms' => 2, 'bathrooms' => 2, 'area' => 980],
-                ['id' => 5, 'title' => 'New Launch Tower A', 'price' => 890000, 'purpose' => 'sell', 'category' => 'flat', 'image_url' => 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80', 'location' => 'Downtown City, Bangalore', 'bedrooms' => 3, 'bathrooms' => 3, 'area' => 1750],
-            ];
-        }
-        if ($endpoint === 'testimonials') {
-            return [
-                ['name' => 'Rajesh Kulkarni', 'role' => 'Homeowner, City Center', 'rating' => 5, 'content' => 'Sharda Properties made our dream of owning a 3BHK flat completely seamless. Their documentation process was transparent and stress-free!'],
-                ['name' => 'Priya Sharma', 'role' => 'Investor, NA Plot Owner', 'rating' => 5, 'content' => 'Finding an authentic NA plot with legal clearance can be tough. Sharda Properties provided clear title verification and smooth registration.'],
-                ['name' => 'Amit Mehta', 'role' => 'Commercial Tenant', 'rating' => 5, 'content' => 'We leased a prime commercial office through Sharda Properties. Professional support and excellent negotiation!'],
-            ];
-        }
-        return [];
-    }
-}
 
-$properties = fetch_api_data('properties', $params) ?? [];
+
+$properties = !empty($properties) ? $properties : (fetch_api_data('properties', $params) ?? []);
 $testimonials = fetch_api_data('testimonials') ?? [];
 
 $page_title = 'Sharda Properties - Premium NA Plots, Flats, Offices & Real Estate Solutions';

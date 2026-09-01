@@ -2,14 +2,56 @@
 // Configuration & Helper functions for CodeIgniter Views
 
 if (!defined('API_BASE_URL')) {
-    $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http';
-    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-    define('API_BASE_URL', $protocol . '://' . $host . '/sharda-properties/public/api');
+    define('API_BASE_URL', base_url('api'));
 }
 
 if (!function_exists('fetch_api_data')) {
     function fetch_api_data($endpoint, $params = []) {
-        $url = API_BASE_URL . '/' . ltrim($endpoint, '/');
+        try {
+            $db = \Config\Database::connect();
+            if ($endpoint === 'properties' || str_starts_with($endpoint, 'properties')) {
+                // If single property request: properties/{id}
+                if (preg_match('/properties\/([0-9]+)/', $endpoint, $m)) {
+                    return $db->table('properties')->where('id', $m[1])->get()->getRowArray();
+                }
+
+                $builder = $db->table('properties');
+                if (!empty($params['category'])) $builder->where('category', $params['category']);
+                if (!empty($params['purpose'])) $builder->where('purpose', $params['purpose']);
+                if (!empty($params['property_type'])) $builder->where('property_type', $params['property_type']);
+                if (!empty($params['flat_type'])) {
+                    $builder->where('category', 'flat');
+                    if ($params['flat_type'] === 'resale') {
+                        $builder->groupStart()
+                                ->like('title', 'resale')
+                                ->orLike('description', 'resale')
+                                ->orWhere('purpose', 'sell')
+                                ->groupEnd();
+                    } elseif ($params['flat_type'] === 'new') {
+                        $builder->groupStart()
+                                ->like('title', 'new')
+                                ->orLike('description', 'new')
+                                ->orWhere('purpose', 'sell')
+                                ->groupEnd();
+                    }
+                }
+                if (!empty($params['search'])) {
+                    $builder->groupStart()
+                            ->like('title', $params['search'])
+                            ->orLike('location', $params['search'])
+                            ->orLike('description', $params['search'])
+                            ->groupEnd();
+                }
+                return $builder->orderBy('id', 'DESC')->get()->getResultArray();
+            }
+
+            if ($endpoint === 'testimonials') {
+                return $db->table('testimonials')->orderBy('id', 'DESC')->get()->getResultArray();
+            }
+        } catch (\Throwable $e) {}
+
+        // HTTP API fetch fallback
+        $url = base_url('api/' . ltrim($endpoint, '/'));
         if (!empty($params)) {
             $url .= '?' . http_build_query($params);
         }
@@ -27,6 +69,6 @@ if (!function_exists('fetch_api_data')) {
             return json_decode($response, true);
         }
 
-        return null;
+        return [];
     }
 }
