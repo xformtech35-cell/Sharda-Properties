@@ -1,0 +1,43 @@
+# Composer vendor directory
+/vendor/
+
+# CodeIgniter writable directory files
+/writable/cache/*
+!/writable/cache/index.html
+!/writable/cache/.gitkeep
+/writable/debugbar/*
+!/writable/debugbar/index.html
+!/writable/debugbar/.gitkeep
+/writable/logs/*
+!/writable/logs/index.html
+!/writable/logs/.gitkeep
+/writable/session/*
+!/writable/session/index.html
+!/writable/session/.gitkeep
+/writable/uploads/*
+!/writable/uploads/index.html
+!/writable/uploads/.gitkeep
+
+# Environment & Config
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE & Editor files
+/.idea/
+/.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Scratch scripts
+/scratch/
