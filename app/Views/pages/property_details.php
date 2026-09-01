@@ -26,7 +26,7 @@ if (empty($property) || !is_array($property)) {
         'bathrooms' => 3,
         'area' => 1850,
         'image_url' => 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
-        'google_map' => 'https://maps.google.com/maps?q=City+Center+Main+Road&output=embed',
+        'google_map' => 'https://maps.google.com/maps?q=City+Center+Main+Road&t=&z=15&ie=UTF8&iwloc=&output=embed',
         'description' => 'Spacious 3BHK flat with modern amenities, 24/7 power backup, and dedicated parking.'
     ];
 }
@@ -49,23 +49,23 @@ if (!function_exists('format_price')) {
 if (!function_exists('get_google_map_embed_src')) {
     function get_google_map_embed_src($input, $location = '') {
         $val = trim($input ?? '');
-        if (empty($val)) {
-            $val = trim($location ?? '');
-        }
-        if (empty($val)) return null;
 
-        // If iframe code pasted (e.g. <iframe src="...">)
+        // 1. If full iframe tag was pasted (e.g. <iframe src="...">)
         if (preg_match('/src=["\']([^"\']+)["\']/', $val, $m)) {
             return $m[1];
         }
 
-        // If already an embed URL
-        if (str_contains($val, 'maps/embed') || str_contains($val, 'output=embed')) {
+        // 2. If it's already an official Google Maps embed URL
+        if (str_contains($val, 'maps/embed') && str_contains($val, 'pb=')) {
             return $val;
         }
 
-        // Convert Google Maps share link, coordinates, or location string to embed URL
-        return 'https://maps.google.com/maps?q=' . urlencode($val) . '&output=embed';
+        // 3. Clean search query (if custom map input is empty or a plain string, fallback to location)
+        $query = !empty($val) ? $val : trim($location ?? '');
+        if (empty($query)) return null;
+
+        // Clean embed URL format without KML/MyMaps warning banners
+        return 'https://maps.google.com/maps?q=' . urlencode($query) . '&t=&z=15&ie=UTF8&iwloc=&output=embed';
     }
 }
 
