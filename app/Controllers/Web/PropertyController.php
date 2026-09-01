@@ -40,6 +40,7 @@ class PropertyController extends BaseController
                 'bathrooms' => 3,
                 'area' => 1850,
                 'image_url' => 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
+                'google_map' => 'https://maps.google.com/maps?q=City+Center+Main+Road&output=embed',
                 'description' => 'Spacious 3BHK flat with modern amenities, 24/7 power backup, and dedicated parking.'
             ];
         }

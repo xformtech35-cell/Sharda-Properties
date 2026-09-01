@@ -26,7 +26,7 @@ if (empty($property) || !is_array($property)) {
         'bathrooms' => 3,
         'area' => 1850,
         'image_url' => 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
-        'google_map' => 'https://maps.google.com/maps?q=Mumbai&output=embed',
+        'google_map' => 'https://maps.google.com/maps?q=City+Center+Main+Road&output=embed',
         'description' => 'Spacious 3BHK flat with modern amenities, 24/7 power backup, and dedicated parking.'
     ];
 }
@@ -47,8 +47,11 @@ if (!function_exists('format_price')) {
 }
 
 if (!function_exists('get_google_map_embed_src')) {
-    function get_google_map_embed_src($input) {
+    function get_google_map_embed_src($input, $location = '') {
         $val = trim($input ?? '');
+        if (empty($val)) {
+            $val = trim($location ?? '');
+        }
         if (empty($val)) return null;
 
         // If iframe code pasted (e.g. <iframe src="...">)
@@ -149,16 +152,16 @@ require_once APPPATH . 'Views/layouts/header.php';
                         </p>
                     </div>
 
-                    <!-- Google Map Section (Only displayed if google_map is set) -->
+                    <!-- Google Map Section -->
                     <?php 
-                    $mapSrc = get_google_map_embed_src($property['google_map'] ?? '');
-                    if (!empty($property['google_map']) && $mapSrc): 
+                    $mapSrc = get_google_map_embed_src($property['google_map'] ?? '', $property['location'] ?? '');
+                    if ($mapSrc): 
                     ?>
                     <div class="border-t border-gray-100 pt-6 space-y-3">
                         <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2">
                             <i data-lucide="map-pin" class="h-5 w-5 text-indigo-600"></i> Property Location Map
                         </h3>
-                        <div class="h-[350px] w-full rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+                        <div class="h-[350px] w-full rounded-xl overflow-hidden border border-gray-200 shadow-sm relative bg-gray-50">
                             <iframe
                                 src="<?= esc($mapSrc) ?>"
                                 width="100%"
