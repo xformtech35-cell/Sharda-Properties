@@ -25,7 +25,7 @@ class PropertyController extends BaseController
         $property = null;
         try {
             $db = \Config\Database::connect();
-            $property = $db->table('properties')->where('id', $id)->get()->getRowArray();
+            $property = $db->table('sp_properties')->where('id', $id)->get()->getRowArray();
         } catch (\Throwable $e) {
             // Fallback sample data if DB is offline
             $property = [

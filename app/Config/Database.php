@@ -31,7 +31,7 @@ class Database extends Config
         'password'     => '',
         'database'     => 'sharda_properties',
         'DBDriver'     => 'MySQLi',
-        'DBPrefix'     => 'sp_',
+        'DBPrefix'     => '',
         'pConnect'     => false,
         'DBDebug'      => true,
         'charset'      => 'utf8mb4',
@@ -57,7 +57,7 @@ class Database extends Config
     public array $sqlite = [
         'database'    => WRITEPATH . 'database.sqlite',
         'DBDriver'    => 'SQLite3',
-        'DBPrefix'    => 'sp_',
+        'DBPrefix'    => '',
         'DBDebug'     => true,
         'swapPre'     => '',
         'failover'    => [],
@@ -111,12 +111,6 @@ class Database extends Config
             return;
         }
 
-        // On production/Render or if MySQL is not available, switch to SQLite for persistent database storage
-        $envHost = getenv('database.default.hostname') ?: ($_ENV['database.default.hostname'] ?? null);
-        if (!empty($envHost) && $envHost !== 'localhost') {
-            $this->defaultGroup = 'default';
-        } elseif (isset($_SERVER['HTTP_HOST']) && !str_contains($_SERVER['HTTP_HOST'], 'localhost') && !str_contains($_SERVER['HTTP_HOST'], '127.0.0.1')) {
-            $this->defaultGroup = 'sqlite';
-        }
+        $this->defaultGroup = 'default';
     }
 }

@@ -35,7 +35,7 @@ class AuthFilter implements FilterInterface
         
         try {
             $db = \Config\Database::connect();
-            $user = $db->table('users')
+            $user = $db->table('sp_users')
                 ->where('token', $token)
                 ->get()
                 ->getRow();

@@ -30,14 +30,14 @@ class Auth extends BaseController
 
         try {
             $db = \Config\Database::connect();
-            $user = $db->table('users')->where('email', $email)->get()->getRow();
+            $user = $db->table('sp_users')->where('email', $email)->get()->getRow();
 
             if ($user && password_verify($password, $user->password)) {
                 $token = bin2hex(random_bytes(32));
                 $expiry = date('Y-m-d H:i:s', strtotime('+24 hours'));
 
                 try {
-                    $db->table('users')->where('id', $user->id)->update([
+                    $db->table('sp_users')->where('id', $user->id)->update([
                         'token' => $token,
                         'token_expires_at' => $expiry
                     ]);
@@ -86,7 +86,7 @@ class Auth extends BaseController
         if ($userId) {
             try {
                 $db = \Config\Database::connect();
-                $db->table('users')->where('id', $userId)->update([
+                $db->table('sp_users')->where('id', $userId)->update([
                     'token' => null,
                     'token_expires_at' => null
                 ]);

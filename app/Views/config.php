@@ -12,10 +12,10 @@ if (!function_exists('fetch_api_data')) {
             if ($endpoint === 'properties' || str_starts_with($endpoint, 'properties')) {
                 // If single property request: properties/{id}
                 if (preg_match('/properties\/([0-9]+)/', $endpoint, $m)) {
-                    return $db->table('properties')->where('id', $m[1])->get()->getRowArray();
+                    return $db->table('sp_properties')->where('id', $m[1])->get()->getRowArray();
                 }
 
-                $builder = $db->table('properties');
+                $builder = $db->table('sp_properties');
                 if (!empty($params['category'])) $builder->where('category', $params['category']);
                 if (!empty($params['purpose'])) $builder->where('purpose', $params['purpose']);
                 if (!empty($params['property_type'])) $builder->where('property_type', $params['property_type']);
@@ -46,15 +46,15 @@ if (!function_exists('fetch_api_data')) {
             }
 
             if ($endpoint === 'testimonials') {
-                return $db->table('testimonials')->orderBy('id', 'DESC')->get()->getResultArray();
+                return $db->table('sp_testimonials')->orderBy('id', 'DESC')->get()->getResultArray();
             }
 
             if ($endpoint === 'partners') {
-                return $db->table('partners')->orderBy('id', 'DESC')->get()->getResultArray();
+                return $db->table('sp_partners')->orderBy('id', 'DESC')->get()->getResultArray();
             }
 
             if ($endpoint === 'categories') {
-                $builder = $db->table('categories');
+                $builder = $db->table('sp_categories');
                 if (!empty($params['type'])) {
                     $builder->where('type', $params['type']);
                 }

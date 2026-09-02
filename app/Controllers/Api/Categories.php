@@ -12,7 +12,7 @@ class Categories extends BaseController
         try {
             $driver = strtolower($db->getPlatform());
             $pkSyntax = str_contains($driver, 'sqlite') ? 'INTEGER PRIMARY KEY AUTOINCREMENT' : 'INT AUTO_INCREMENT PRIMARY KEY';
-            $tableName = $db->prefixTable('categories');
+            $tableName = $db->prefixTable('sp_categories');
 
             $db->query("CREATE TABLE IF NOT EXISTS {$tableName} (
                 id {$pkSyntax},
@@ -31,16 +31,16 @@ class Categories extends BaseController
             $db = \Config\Database::connect();
             $this->ensureTableExists($db);
 
-            $builder = $db->table('categories');
+            $builder = $db->table('sp_categories');
             if ($type) {
                 $builder->where('type', $type);
             }
-            $categories = $builder->orderBy('id', 'ASC')->get()->getResultArray();
+            $sp_categories = $builder->orderBy('id', 'ASC')->get()->getResultArray();
         } catch (\Throwable $e) {
-            $categories = [];
+            $sp_categories = [];
         }
 
-        return $this->response->setJSON($categories);
+        return $this->response->setJSON($sp_categories);
     }
 
     public function create(): ResponseInterface
@@ -71,7 +71,7 @@ class Categories extends BaseController
         try {
             $db = \Config\Database::connect();
             $this->ensureTableExists($db);
-            $db->table('categories')->insert($data);
+            $db->table('sp_categories')->insert($data);
             $data['id'] = $db->insertID();
         } catch (\Throwable $e) {
             return $this->response->setJSON(['error' => $e->getMessage()])->setStatusCode(500);
@@ -92,7 +92,7 @@ class Categories extends BaseController
         try {
             $db = \Config\Database::connect();
             $this->ensureTableExists($db);
-            $db->table('categories')->where('id', $id)->delete();
+            $db->table('sp_categories')->where('id', $id)->delete();
         } catch (\Throwable $e) {}
 
         return $this->response->setJSON(['message' => 'Category deleted successfully']);

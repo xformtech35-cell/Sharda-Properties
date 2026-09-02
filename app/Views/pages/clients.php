@@ -6,80 +6,12 @@ $page_description = 'Discover our valued clients, successful real estate transac
 
 $db_testimonials = fetch_api_data('testimonials') ?? [];
 
-$default_testimonials = [
-    [
-        'id' => 1,
-        'name' => 'Rajesh Kulkarni',
-        'role' => 'Homeowner, City Center',
-        'rating' => 5,
-        'content' => 'Sharda Properties made our dream of owning a 3BHK flat completely seamless. Their documentation process was transparent and stress-free!'
-    ],
-    [
-        'id' => 2,
-        'name' => 'Priya Sharma',
-        'role' => 'Investor, NA Plot Owner',
-        'rating' => 5,
-        'content' => 'Finding an authentic NA plot with legal clearance can be tough. Sharda Properties provided clear title verification and smooth registration.'
-    ],
-    [
-        'id' => 3,
-        'name' => 'Amit Mehta',
-        'role' => 'Commercial Tenant',
-        'rating' => 5,
-        'content' => 'We leased a prime commercial office through Sharda Properties. Professional support and excellent negotiation!'
-    ],
-    [
-        'id' => 4,
-        'name' => 'Sunita Deshmukh',
-        'role' => 'Resale Flat Buyer',
-        'rating' => 5,
-        'content' => 'Very reliable service! They guided us through home loan approval, property inspection, and legal agreement smoothly.'
-    ],
-    [
-        'id' => 5,
-        'name' => 'Vikram Patil',
-        'role' => 'NA Plot Owner, Green Valley',
-        'rating' => 5,
-        'content' => 'Clear title plot with all government sanctions verified. I am extremely pleased with Sharda Properties\' dedication and transparency.'
-    ],
-    [
-        'id' => 6,
-        'name' => 'Ananya Roy',
-        'role' => 'IT Office Owner',
-        'rating' => 5,
-        'content' => 'Outstanding commercial real estate advisory! Got our team into a modern workspace with zero hassle.'
-    ],
-    [
-        'id' => 7,
-        'name' => 'Sanjay Joshi',
-        'role' => 'Villa Owner, Metro Central',
-        'rating' => 5,
-        'content' => 'The team at Sharda Properties went above and beyond to help us find our dream home. Highly recommended for property buyers!'
-    ],
-    [
-        'id' => 8,
-        'name' => 'Meera Nair',
-        'role' => 'Apartment Investor',
-        'rating' => 5,
-        'content' => 'Transparent dealing, complete documentation support, and prompt post-sale assistance. Truly a trusted real estate partner.'
-    ],
-    [
-        'id' => 9,
-        'name' => 'Ganesh Pawar',
-        'role' => 'Commercial Plot Investor',
-        'rating' => 5,
-        'content' => 'Excellent investment advice! The plot appreciation has been fantastic. Sharda Properties is the benchmark for authenticity.'
-    ]
-];
-
-$all_testimonials = !empty($db_testimonials) ? array_merge($db_testimonials, array_slice($default_testimonials, count($db_testimonials))) : $default_testimonials;
-
 require_once APPPATH . 'Views/layouts/header.php';
 ?>
 
 <div class="bg-gray-50 min-h-screen pb-16">
     <!-- Header Banner -->
-    <div class="bg-indigo-900 text-white py-16 px-4 text-center relative overflow-hidden">
+    <div class="bg-indigo-900 text-white py-16 px-4 text-center relative overflow-hidden hero-section">
         <div class="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center"></div>
         <div class="relative z-10 max-w-4xl mx-auto space-y-3">
             <span class="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-xs font-semibold tracking-wider uppercase border border-white/10 animate-fade-in-up">Trusted Reviews</span>
@@ -120,19 +52,19 @@ require_once APPPATH . 'Views/layouts/header.php';
                     <p class="text-gray-500 text-sm mt-0.5">Real feedback from verified buyers, sellers, and investors</p>
                 </div>
                 <div class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-full border border-indigo-100">
-                    <span id="totalTestimonialsCount"><?= count($all_testimonials) ?></span> Reviews Featured
+                    <span id="totalTestimonialsCount"><?= count($db_testimonials) ?></span> Reviews Featured
                 </div>
             </div>
 
             <!-- Grid Container -->
             <div id="testimonialsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Testimonial Cards render dynamically via JavaScript with animation -->
+                <!-- Dynamic Testimonial Cards rendered via JS -->
             </div>
 
             <!-- Pagination Bar -->
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-gray-200 pt-6">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-gray-200 pt-6" id="paginationWrapper">
                 <div class="text-xs font-semibold text-gray-500" id="paginationInfo">
-                    Showing 1 to 6 of 9 testimonials
+                    Showing 0 to 0 of 0 testimonials
                 </div>
                 <div class="flex items-center gap-2" id="paginationButtons">
                     <!-- Pagination buttons rendered via JS -->
@@ -144,7 +76,7 @@ require_once APPPATH . 'Views/layouts/header.php';
 </div>
 
 <script>
-    const testimonialsData = <?= json_encode($all_testimonials) ?>;
+    const testimonialsData = <?= json_encode($db_testimonials) ?>;
     const itemsPerPage = 6;
     let currentPage = 1;
 
@@ -169,17 +101,30 @@ require_once APPPATH . 'Views/layouts/header.php';
     function renderTestimonials(page) {
         currentPage = page;
         const totalItems = testimonialsData.length;
+        const grid = document.getElementById('testimonialsGrid');
+        grid.innerHTML = '';
+
+        if (totalItems === 0) {
+            grid.innerHTML = `
+                <div class="col-span-full py-16 text-center text-gray-500 bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
+                    <i data-lucide="star" class="h-12 w-12 text-gray-300 mx-auto mb-3"></i>
+                    <p class="text-base font-bold text-gray-700">No client reviews added yet.</p>
+                    <p class="text-xs text-gray-400 mt-1">Add client testimonials from the admin dashboard to feature them here.</p>
+                </div>
+            `;
+            document.getElementById('paginationInfo').innerText = 'Showing 0 of 0 testimonials';
+            document.getElementById('paginationButtons').innerHTML = '';
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            return;
+        }
+
         const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
-        
         if (currentPage < 1) currentPage = 1;
         if (currentPage > totalPages) currentPage = totalPages;
 
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
         const currentItems = testimonialsData.slice(startIndex, endIndex);
-
-        const grid = document.getElementById('testimonialsGrid');
-        grid.innerHTML = '';
 
         if (window.TopLoader) window.TopLoader.start();
 
@@ -204,7 +149,7 @@ require_once APPPATH . 'Views/layouts/header.php';
                     </div>
                     <div>
                         <h4 class="font-bold text-gray-900 text-sm">${escapeHtml(item.name)}</h4>
-                        <span class="text-xs text-gray-500">${escapeHtml(item.role)}</span>
+                        <span class="text-xs text-gray-500">${escapeHtml(item.role || 'Valued Client')}</span>
                     </div>
                 </div>
             `;
@@ -214,7 +159,7 @@ require_once APPPATH . 'Views/layouts/header.php';
         // Update Pagination Info
         const pageInfo = document.getElementById('paginationInfo');
         if (pageInfo) {
-            pageInfo.innerText = `Showing ${totalItems > 0 ? startIndex + 1 : 0} to ${endIndex} of ${totalItems} testimonials`;
+            pageInfo.innerText = `Showing ${startIndex + 1} to ${endIndex} of ${totalItems} testimonials`;
         }
 
         // Render Pagination Buttons

@@ -8,7 +8,7 @@ if (empty($property) || !is_array($property)) {
     if ($propId) {
         try {
             $db = \Config\Database::connect();
-            $property = $db->table('properties')->where('id', $propId)->get()->getRowArray();
+            $property = $db->table('sp_properties')->where('id', $propId)->get()->getRowArray();
         } catch (\Throwable $e) {}
     }
 }

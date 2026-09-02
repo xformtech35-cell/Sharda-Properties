@@ -15,8 +15,9 @@ class Properties extends BaseController
         try {
             $driver = strtolower($db->getPlatform());
             $pkSyntax = str_contains($driver, 'sqlite') ? 'INTEGER PRIMARY KEY AUTOINCREMENT' : 'INT AUTO_INCREMENT PRIMARY KEY';
+            $tableName = $db->prefixTable('sp_properties');
 
-            $db->query("CREATE TABLE IF NOT EXISTS properties (
+            $db->query("CREATE TABLE IF NOT EXISTS {$tableName} (
                 id {$pkSyntax},
                 title VARCHAR(255) NOT NULL,
                 description TEXT,
@@ -35,61 +36,15 @@ class Properties extends BaseController
 
             // Try adding google_map column if table exists without it
             try {
-                $db->query("ALTER TABLE properties ADD COLUMN google_map TEXT NULL");
-            } catch (\Throwable $ex) {}
-
-            $builder = $db->table('properties');
-            if ($builder->countAllResults(false) === 0) {
-                $builder->insertBatch([
-                    [
-                        'title' => 'Luxury 3BHK Apartment in Prime Location',
-                        'price' => 12500000,
-                        'location' => 'City Center, Main Road',
-                        'category' => 'flat',
-                        'purpose' => 'sell',
-                        'property_type' => 'residential',
-                        'bedrooms' => 3,
-                        'bathrooms' => 3,
-                        'area' => 1850,
-                        'image_url' => 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
-                        'google_map' => 'https://maps.google.com/maps?q=Mumbai&output=embed',
-                        'description' => 'Spacious 3BHK flat with modern amenities, 24/7 power backup, and dedicated parking.'
-                    ],
-                    [
-                        'title' => 'Premium NA Plot - Clear Title',
-                        'price' => 4500000,
-                        'location' => 'Green Valley, Phase 2',
-                        'category' => 'na_plot',
-                        'purpose' => 'sell',
-                        'property_type' => 'residential',
-                        'bedrooms' => 0,
-                        'bathrooms' => 0,
-                        'area' => 2400,
-                        'image_url' => 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80',
-                        'google_map' => '',
-                        'description' => 'Collector approved NA plot ready for immediate construction with electricity and water connection.'
-                    ],
-                    [
-                        'title' => 'Modern Commercial Office Space',
-                        'price' => 65000,
-                        'location' => 'Business Park, IT Hub',
-                        'category' => 'office',
-                        'purpose' => 'rent',
-                        'property_type' => 'commercial',
-                        'bedrooms' => 0,
-                        'bathrooms' => 2,
-                        'area' => 1200,
-                        'image_url' => 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
-                        'google_map' => 'https://maps.google.com/maps?q=Pune&output=embed',
-                        'description' => 'Fully furnished office space suitable for IT companies, consultancies, or corporate branch.'
-                    ]
-                ]);
+                $db->query("ALTER TABLE {$tableName} ADD COLUMN google_map TEXT NULL");
+            } catch (\Throwable $ex) {
             }
-        } catch (\Throwable $e) {}
+        } catch (\Throwable $e) {
+        }
     }
 
     /**
-     * Get list of all properties
+     * Get list of all sp_properties
      */
     public function index(): ResponseInterface
     {
@@ -102,22 +57,22 @@ class Properties extends BaseController
         try {
             $db = \Config\Database::connect();
             $this->ensureTableExists($db);
-            $builder = $db->table('properties');
+            $builder = $db->table('sp_properties');
 
             if (!empty($flatType)) {
                 $builder->where('category', 'flat');
                 if ($flatType === 'resale') {
                     $builder->groupStart()
-                            ->like('title', 'resale')
-                            ->orLike('description', 'resale')
-                            ->orWhere('purpose', 'sell')
-                            ->groupEnd();
+                        ->like('title', 'resale')
+                        ->orLike('description', 'resale')
+                        ->orWhere('purpose', 'sell')
+                        ->groupEnd();
                 } elseif ($flatType === 'new') {
                     $builder->groupStart()
-                            ->like('title', 'new')
-                            ->orLike('description', 'new')
-                            ->orWhere('purpose', 'sell')
-                            ->groupEnd();
+                        ->like('title', 'new')
+                        ->orLike('description', 'new')
+                        ->orWhere('purpose', 'sell')
+                        ->groupEnd();
                 }
             } elseif (!empty($category)) {
                 $builder->where('category', $category);
@@ -133,49 +88,18 @@ class Properties extends BaseController
 
             if (!empty($search)) {
                 $builder->groupStart()
-                        ->like('title', $search)
-                        ->orLike('location', $search)
-                        ->orLike('description', $search)
-                        ->groupEnd();
+                    ->like('title', $search)
+                    ->orLike('location', $search)
+                    ->orLike('description', $search)
+                    ->groupEnd();
             }
 
-            $properties = $builder->orderBy('id', 'DESC')->get()->getResultArray();
+            $sp_properties = $builder->orderBy('id', 'DESC')->get()->getResultArray();
         } catch (\Throwable $e) {
-            $properties = [
-                [
-                    'id' => 1,
-                    'title' => 'Luxury 3BHK Apartment in Prime Location',
-                    'price' => 12500000,
-                    'location' => 'City Center, Main Road',
-                    'category' => 'flat',
-                    'purpose' => 'sell',
-                    'property_type' => 'residential',
-                    'bedrooms' => 3,
-                    'bathrooms' => 3,
-                    'area' => 1850,
-                    'image_url' => 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
-                    'google_map' => 'https://maps.google.com/maps?q=Mumbai&output=embed',
-                    'description' => 'Spacious 3BHK flat with modern amenities, 24/7 power backup, and dedicated parking.'
-                ],
-                [
-                    'id' => 2,
-                    'title' => 'Premium NA Plot - Clear Title',
-                    'price' => 4500000,
-                    'location' => 'Green Valley, Phase 2',
-                    'category' => 'na_plot',
-                    'purpose' => 'sell',
-                    'property_type' => 'residential',
-                    'bedrooms' => 0,
-                    'bathrooms' => 0,
-                    'area' => 2400,
-                    'image_url' => 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80',
-                    'google_map' => '',
-                    'description' => 'Collector approved NA plot ready for immediate construction with electricity and water connection.'
-                ]
-            ];
+            $sp_properties = [];
         }
 
-        return $this->response->setJSON($properties);
+        return $this->response->setJSON($sp_properties);
     }
 
     /**
@@ -190,7 +114,7 @@ class Properties extends BaseController
         try {
             $db = \Config\Database::connect();
             $this->ensureTableExists($db);
-            $property = $db->table('properties')->where('id', $id)->get()->getRowArray();
+            $property = $db->table('sp_properties')->where('id', $id)->get()->getRowArray();
         } catch (\Throwable $e) {
             $property = [
                 'id' => $id,
@@ -254,7 +178,8 @@ class Properties extends BaseController
                     @$imageFile->move($uploadPath, $newName);
                     $imageUrl = '/uploads/' . $newName;
                 }
-            } catch (\Throwable $imgErr) {}
+            } catch (\Throwable $imgErr) {
+            }
 
             $data = [
                 'title'         => $title,
@@ -272,14 +197,10 @@ class Properties extends BaseController
                 'created_at'    => date('Y-m-d H:i:s')
             ];
 
-            try {
-                $db = \Config\Database::connect();
-                $this->ensureTableExists($db);
-                $db->table('properties')->insert($data);
-                $data['id'] = $db->insertID();
-            } catch (\Throwable $dbErr) {
-                $data['id'] = rand(100, 9999);
-            }
+            $db = \Config\Database::connect();
+            $this->ensureTableExists($db);
+            $db->table('sp_properties')->insert($data);
+            $data['id'] = $db->insertID();
 
             return $this->response->setJSON([
                 'message' => 'Property created successfully',
@@ -340,13 +261,15 @@ class Properties extends BaseController
                     @$imageFile->move($uploadPath, $newName);
                     $data['image_url'] = '/uploads/' . $newName;
                 }
-            } catch (\Throwable $imgErr) {}
+            } catch (\Throwable $imgErr) {
+            }
 
             try {
                 $db = \Config\Database::connect();
                 $this->ensureTableExists($db);
-                $db->table('properties')->where('id', $id)->update($data);
-            } catch (\Throwable $e) {}
+                $db->table('sp_properties')->where('id', $id)->update($data);
+            } catch (\Throwable $e) {
+            }
 
             $data['id'] = $id;
 
@@ -373,8 +296,9 @@ class Properties extends BaseController
         try {
             $db = \Config\Database::connect();
             $this->ensureTableExists($db);
-            $db->table('properties')->where('id', $id)->delete();
-        } catch (\Throwable $e) {}
+            $db->table('sp_properties')->where('id', $id)->delete();
+        } catch (\Throwable $e) {
+        }
 
         return $this->response->setJSON([
             'message' => 'Property deleted successfully'

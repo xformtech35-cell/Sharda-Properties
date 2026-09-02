@@ -42,7 +42,8 @@ class Enquiries extends BaseController
 
         try {
             $db = \Config\Database::connect();
-            $db->query("CREATE TABLE IF NOT EXISTS enquiries (
+            $tableName = $db->prefixTable('sp_enquiries');
+            $db->query("CREATE TABLE IF NOT EXISTS {$tableName} (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(100) NOT NULL,
                 email VARCHAR(100) NOT NULL,
@@ -51,7 +52,7 @@ class Enquiries extends BaseController
                 property_id INT NULL,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )");
-            $db->table('enquiries')->insert($data);
+            $db->table('sp_enquiries')->insert($data);
         } catch (\Throwable $e) {}
 
         return $this->response->setJSON([
@@ -60,7 +61,7 @@ class Enquiries extends BaseController
     }
 
     /**
-     * Admin-only endpoint to list enquiries with type filtering
+     * Admin-only endpoint to list sp_enquiries with type filtering
      */
     public function index(): ResponseInterface
     {
@@ -68,7 +69,8 @@ class Enquiries extends BaseController
 
         try {
             $db = \Config\Database::connect();
-            $db->query("CREATE TABLE IF NOT EXISTS enquiries (
+            $tableName = $db->prefixTable('sp_enquiries');
+            $db->query("CREATE TABLE IF NOT EXISTS {$tableName} (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(100) NOT NULL,
                 email VARCHAR(100) NOT NULL,
@@ -77,22 +79,22 @@ class Enquiries extends BaseController
                 property_id INT NULL,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )");
-            $builder = $db->table('enquiries')
-                ->select('enquiries.*, properties.title as property_title')
-                ->join('properties', 'properties.id = enquiries.property_id', 'left');
+            $builder = $db->table('sp_enquiries')
+                ->select('sp_enquiries.*, sp_properties.title as property_title')
+                ->join('sp_properties', 'sp_properties.id = sp_enquiries.property_id', 'left');
 
             if ($type === 'property') {
-                $builder->where('enquiries.property_id IS NOT NULL');
+                $builder->where('sp_enquiries.property_id IS NOT NULL');
             } elseif ($type === 'contact') {
-                $builder->where('enquiries.property_id IS NULL');
+                $builder->where('sp_enquiries.property_id IS NULL');
             }
 
-            $enquiries = $builder->orderBy('enquiries.id', 'DESC')->get()->getResultArray();
+            $sp_enquiries = $builder->orderBy('sp_enquiries.id', 'DESC')->get()->getResultArray();
         } catch (\Throwable $e) {
-            $enquiries = [];
+            $sp_enquiries = [];
         }
 
-        return $this->response->setJSON($enquiries);
+        return $this->response->setJSON($sp_enquiries);
     }
 
     /**
@@ -106,7 +108,7 @@ class Enquiries extends BaseController
 
         try {
             $db = \Config\Database::connect();
-            $db->table('enquiries')->where('id', $id)->delete();
+            $db->table('sp_enquiries')->where('id', $id)->delete();
         } catch (\Throwable $e) {}
 
         return $this->response->setJSON([

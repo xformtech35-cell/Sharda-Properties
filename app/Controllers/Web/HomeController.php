@@ -18,7 +18,7 @@ class HomeController extends BaseController
 
         try {
             $db = \Config\Database::connect();
-            $builder = $db->table('properties');
+            $builder = $db->table('sp_properties');
 
             if (!empty($flatType)) {
                 $builder->where('category', 'flat');

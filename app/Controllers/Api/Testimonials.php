@@ -13,7 +13,7 @@ class Testimonials extends BaseController
             $driver = strtolower($db->getPlatform());
             $pkSyntax = str_contains($driver, 'sqlite') ? 'INTEGER PRIMARY KEY AUTOINCREMENT' : 'INT AUTO_INCREMENT PRIMARY KEY';
 
-            $tableName = $db->prefixTable('testimonials');
+            $tableName = $db->prefixTable('sp_testimonials');
             $db->query("CREATE TABLE IF NOT EXISTS {$tableName} (
                 id {$pkSyntax},
                 name VARCHAR(255) NOT NULL,
@@ -30,9 +30,9 @@ class Testimonials extends BaseController
         try {
             $db = \Config\Database::connect();
             $this->ensureTableExists($db);
-            $testimonials = $db->table('testimonials')->orderBy('id', 'DESC')->get()->getResultArray();
+            $sp_testimonials = $db->table('sp_testimonials')->orderBy('id', 'DESC')->get()->getResultArray();
         } catch (\Throwable $e) {
-            $testimonials = [
+            $sp_testimonials = [
                 [
                     'id' => 1,
                     'name' => 'Rajesh Kulkarni',
@@ -57,7 +57,7 @@ class Testimonials extends BaseController
             ];
         }
 
-        return $this->response->setJSON($testimonials);
+        return $this->response->setJSON($sp_testimonials);
     }
 
     public function create(): ResponseInterface
@@ -91,7 +91,7 @@ class Testimonials extends BaseController
         try {
             $db = \Config\Database::connect();
             $this->ensureTableExists($db);
-            $db->table('testimonials')->insert($data);
+            $db->table('sp_testimonials')->insert($data);
             $data['id'] = $db->insertID();
         } catch (\Throwable $e) {
             $data['id'] = rand(10, 999);
@@ -112,7 +112,7 @@ class Testimonials extends BaseController
         try {
             $db = \Config\Database::connect();
             $this->ensureTableExists($db);
-            $db->table('testimonials')->where('id', $id)->delete();
+            $db->table('sp_testimonials')->where('id', $id)->delete();
         } catch (\Throwable $e) {}
 
         return $this->response->setJSON([

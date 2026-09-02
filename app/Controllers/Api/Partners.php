@@ -12,7 +12,7 @@ class Partners extends BaseController
         try {
             $driver = strtolower($db->getPlatform());
             $pkSyntax = str_contains($driver, 'sqlite') ? 'INTEGER PRIMARY KEY AUTOINCREMENT' : 'INT AUTO_INCREMENT PRIMARY KEY';
-            $tableName = $db->prefixTable('partners');
+            $tableName = $db->prefixTable('sp_partners');
 
             $db->query("CREATE TABLE IF NOT EXISTS {$tableName} (
                 id {$pkSyntax},
@@ -31,12 +31,12 @@ class Partners extends BaseController
         try {
             $db = \Config\Database::connect();
             $this->ensureTableExists($db);
-            $partners = $db->table('partners')->orderBy('id', 'DESC')->get()->getResultArray();
+            $sp_partners = $db->table('sp_partners')->orderBy('id', 'DESC')->get()->getResultArray();
         } catch (\Throwable $e) {
-            $partners = [];
+            $sp_partners = [];
         }
 
-        return $this->response->setJSON($partners);
+        return $this->response->setJSON($sp_partners);
     }
 
     public function create(): ResponseInterface
@@ -63,12 +63,12 @@ class Partners extends BaseController
         $file = $this->request->getFile('logo');
         if ($file && $file->isValid() && !$file->hasMoved()) {
             $newName = $file->getRandomName();
-            $uploadPath = ROOTPATH . 'public/uploads/partners';
+            $uploadPath = ROOTPATH . 'public/uploads/sp_partners';
             if (!is_dir($uploadPath)) {
                 mkdir($uploadPath, 0777, true);
             }
             $file->move($uploadPath, $newName);
-            $logo_url = '/uploads/partners/' . $newName;
+            $logo_url = '/uploads/sp_partners/' . $newName;
         }
 
         if (empty($name)) {
@@ -86,14 +86,10 @@ class Partners extends BaseController
             'created_at'  => date('Y-m-d H:i:s')
         ];
 
-        try {
-            $db = \Config\Database::connect();
-            $this->ensureTableExists($db);
-            $db->table('partners')->insert($data);
-            $data['id'] = $db->insertID();
-        } catch (\Throwable $e) {
-            $data['id'] = rand(10, 999);
-        }
+        $db = \Config\Database::connect();
+        $this->ensureTableExists($db);
+        $db->table('sp_partners')->insert($data);
+        $data['id'] = $db->insertID();
 
         return $this->response->setJSON([
             'message' => 'Partner / Client added successfully',
@@ -123,12 +119,12 @@ class Partners extends BaseController
         $file = $this->request->getFile('logo');
         if ($file && $file->isValid() && !$file->hasMoved()) {
             $newName = $file->getRandomName();
-            $uploadPath = ROOTPATH . 'public/uploads/partners';
+            $uploadPath = ROOTPATH . 'public/uploads/sp_partners';
             if (!is_dir($uploadPath)) {
                 mkdir($uploadPath, 0777, true);
             }
             $file->move($uploadPath, $newName);
-            $logo_url = '/uploads/partners/' . $newName;
+            $logo_url = '/uploads/sp_partners/' . $newName;
         }
 
         $data = [];
@@ -145,7 +141,7 @@ class Partners extends BaseController
         try {
             $db = \Config\Database::connect();
             $this->ensureTableExists($db);
-            $db->table('partners')->where('id', $id)->update($data);
+            $db->table('sp_partners')->where('id', $id)->update($data);
         } catch (\Throwable $e) {
             return $this->response->setJSON(['error' => $e->getMessage()])->setStatusCode(500);
         }
@@ -166,7 +162,7 @@ class Partners extends BaseController
         try {
             $db = \Config\Database::connect();
             $this->ensureTableExists($db);
-            $db->table('partners')->where('id', $id)->delete();
+            $db->table('sp_partners')->where('id', $id)->delete();
         } catch (\Throwable $e) {}
 
         return $this->response->setJSON([
