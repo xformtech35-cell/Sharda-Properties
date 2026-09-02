@@ -58,8 +58,31 @@
 
         <!-- Properties Tab Panel -->
         <div id="panelProperties">
-            <div id="propertiesLoading" class="py-12 flex justify-center">
-                <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-indigo-600"></div>
+            <div id="propertiesLoading" class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 space-y-4">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 skeleton shrink-0"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 skeleton w-1/3"></div>
+                        <div class="h-3 skeleton w-1/4"></div>
+                    </div>
+                    <div class="h-8 skeleton w-20"></div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 skeleton shrink-0"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 skeleton w-2/5"></div>
+                        <div class="h-3 skeleton w-1/3"></div>
+                    </div>
+                    <div class="h-8 skeleton w-20"></div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 skeleton shrink-0"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 skeleton w-1/2"></div>
+                        <div class="h-3 skeleton w-1/4"></div>
+                    </div>
+                    <div class="h-8 skeleton w-20"></div>
+                </div>
             </div>
 
             <div id="propertiesTableContainer" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hidden">
@@ -86,8 +109,23 @@
 
         <!-- Property Enquiries Tab Panel -->
         <div id="panelPropEnquiries" class="hidden">
-            <div id="propEnquiriesLoading" class="py-12 flex justify-center">
-                <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-indigo-600"></div>
+            <div id="propEnquiriesLoading" class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 space-y-4">
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 skeleton rounded-full shrink-0"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 skeleton w-1/4"></div>
+                        <div class="h-3 skeleton w-1/2"></div>
+                    </div>
+                    <div class="h-8 skeleton w-16"></div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 skeleton rounded-full shrink-0"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 skeleton w-1/3"></div>
+                        <div class="h-3 skeleton w-2/5"></div>
+                    </div>
+                    <div class="h-8 skeleton w-16"></div>
+                </div>
             </div>
 
             <div id="propEnquiriesTableContainer" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hidden">
@@ -113,8 +151,23 @@
 
         <!-- Contact Enquiries Tab Panel -->
         <div id="panelContactEnquiries" class="hidden">
-            <div id="contactEnquiriesLoading" class="py-12 flex justify-center">
-                <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-indigo-600"></div>
+            <div id="contactEnquiriesLoading" class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 space-y-4">
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 skeleton rounded-full shrink-0"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 skeleton w-1/4"></div>
+                        <div class="h-3 skeleton w-2/3"></div>
+                    </div>
+                    <div class="h-8 skeleton w-16"></div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 skeleton rounded-full shrink-0"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 skeleton w-1/3"></div>
+                        <div class="h-3 skeleton w-1/2"></div>
+                    </div>
+                    <div class="h-8 skeleton w-16"></div>
+                </div>
             </div>
 
             <div id="contactEnquiriesTableContainer" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hidden">
@@ -139,8 +192,23 @@
 
         <!-- Testimonials Tab Panel -->
         <div id="panelTestimonials" class="hidden">
-            <div id="testimonialsLoading" class="py-12 flex justify-center">
-                <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-indigo-600"></div>
+            <div id="testimonialsLoading" class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 space-y-4">
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 skeleton rounded-full shrink-0"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 skeleton w-1/4"></div>
+                        <div class="h-3 skeleton w-3/4"></div>
+                    </div>
+                    <div class="h-8 skeleton w-16"></div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 skeleton rounded-full shrink-0"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-4 skeleton w-1/3"></div>
+                        <div class="h-3 skeleton w-1/2"></div>
+                    </div>
+                    <div class="h-8 skeleton w-16"></div>
+                </div>
             </div>
 
             <div id="testimonialsTableContainer" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hidden">
@@ -258,7 +326,10 @@
 
             <div class="flex justify-end gap-3 border-t border-gray-100 pt-4">
                 <button type="button" id="modalCancelBtn" class="px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-lg cursor-pointer">Cancel</button>
-                <button type="submit" id="modalSubmitBtn" class="px-6 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg cursor-pointer">Save Property</button>
+                <button type="submit" id="modalSubmitBtn" class="inline-flex items-center gap-2 px-6 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 rounded-lg cursor-pointer transition-all">
+                    <span id="modalSubmitSpinner" class="hidden"><svg class="animate-spin-custom h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></span>
+                    <span id="modalSubmitText">Save Property</span>
+                </button>
             </div>
         </form>
     </div>
@@ -266,7 +337,7 @@
 
 <!-- Testimonial Add Modal -->
 <div id="testimonialModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-100">
+    <div class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-100 animate-scale-in">
         <div class="p-6 border-b border-gray-100 flex justify-between items-center">
             <h3 class="text-xl font-bold text-gray-900">Add Client Testimonial</h3>
             <button id="testimonialModalCloseBtn" class="text-gray-400 hover:text-gray-600 cursor-pointer">
@@ -275,7 +346,7 @@
         </div>
 
         <form id="testimonialForm" class="p-6 space-y-4">
-            <div id="testimonialFormErrorAlert" class="hidden bg-red-50 border-l-4 border-red-400 p-4 text-sm text-red-700 rounded-r-lg"></div>
+            <div id="testimonialFormErrorAlert" class="hidden bg-red-50 border-l-4 border-red-400 p-4 text-sm text-red-700 rounded-r-lg animate-fade-in"></div>
 
             <div>
                 <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Client Name *</label>
@@ -303,7 +374,10 @@
 
             <div class="flex justify-end gap-3 border-t border-gray-100 pt-4">
                 <button type="button" id="testimonialModalCancelBtn" class="px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-lg cursor-pointer">Cancel</button>
-                <button type="submit" id="testimonialModalSubmitBtn" class="px-6 py-2 text-sm font-semibold text-white bg-amber-600 hover:bg-amber-700 rounded-lg cursor-pointer">Save Testimonial</button>
+                <button type="submit" id="testimonialModalSubmitBtn" class="inline-flex items-center gap-2 px-6 py-2 text-sm font-semibold text-white bg-amber-600 hover:bg-amber-700 disabled:opacity-60 rounded-lg cursor-pointer transition-all">
+                    <span id="testimonialModalSubmitSpinner" class="hidden"><svg class="animate-spin-custom h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></span>
+                    <span id="testimonialModalSubmitText">Save Testimonial</span>
+                </button>
             </div>
         </form>
     </div>
@@ -347,12 +421,16 @@
 
     function setActiveTab(activeBtn, activePanel) {
         [tabPropsBtn, tabPropEnqBtn, tabContactEnqBtn, tabTestimonialsBtn].forEach(btn => {
-            btn.className = 'pb-4 px-1 text-sm font-bold border-b-2 border-transparent text-gray-500 hover:text-gray-700 flex items-center gap-2 cursor-pointer';
+            btn.className = 'pb-4 px-1 text-sm font-bold border-b-2 border-transparent text-gray-500 hover:text-gray-700 flex items-center gap-2 cursor-pointer transition-colors';
         });
-        [panelProps, panelPropEnq, panelContactEnq, panelTestimonials].forEach(panel => panel.classList.add('hidden'));
+        [panelProps, panelPropEnq, panelContactEnq, panelTestimonials].forEach(panel => {
+            panel.classList.add('hidden');
+            panel.classList.remove('animate-fade-in');
+        });
 
-        activeBtn.className = 'pb-4 px-1 text-sm font-bold border-b-2 border-indigo-600 text-indigo-600 flex items-center gap-2 cursor-pointer';
+        activeBtn.className = 'pb-4 px-1 text-sm font-bold border-b-2 border-indigo-600 text-indigo-600 flex items-center gap-2 cursor-pointer transition-colors';
         activePanel.classList.remove('hidden');
+        activePanel.classList.add('animate-fade-in');
     }
 
     tabPropsBtn.addEventListener('click', () => setActiveTab(tabPropsBtn, panelProps));
@@ -626,9 +704,15 @@
     document.getElementById('propertyForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const submitBtn = document.getElementById('modalSubmitBtn');
+        const submitText = document.getElementById('modalSubmitText');
+        const submitSpinner = document.getElementById('modalSubmitSpinner');
         const alertBox = document.getElementById('formErrorAlert');
+
         submitBtn.disabled = true;
+        if (submitSpinner) submitSpinner.classList.remove('hidden');
+        if (submitText) submitText.innerText = 'Saving...';
         if (alertBox) alertBox.classList.add('hidden');
+        if (window.TopLoader) window.TopLoader.start();
 
         const formData = new FormData(this);
         const editId = document.getElementById('editPropertyId').value;
@@ -662,6 +746,9 @@
             }
         } finally {
             submitBtn.disabled = false;
+            if (submitSpinner) submitSpinner.classList.add('hidden');
+            if (submitText) submitText.innerText = 'Save Property';
+            if (window.TopLoader) window.TopLoader.complete();
         }
     });
 
@@ -669,9 +756,15 @@
     document.getElementById('testimonialForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const submitBtn = document.getElementById('testimonialModalSubmitBtn');
+        const submitText = document.getElementById('testimonialModalSubmitText');
+        const submitSpinner = document.getElementById('testimonialModalSubmitSpinner');
         const alertBox = document.getElementById('testimonialFormErrorAlert');
+
         submitBtn.disabled = true;
+        if (submitSpinner) submitSpinner.classList.remove('hidden');
+        if (submitText) submitText.innerText = 'Saving...';
         alertBox.classList.add('hidden');
+        if (window.TopLoader) window.TopLoader.start();
 
         const formData = new FormData(this);
         try {
@@ -693,6 +786,9 @@
             alertBox.classList.remove('hidden');
         } finally {
             submitBtn.disabled = false;
+            if (submitSpinner) submitSpinner.classList.add('hidden');
+            if (submitText) submitText.innerText = 'Save Testimonial';
+            if (window.TopLoader) window.TopLoader.complete();
         }
     });
 

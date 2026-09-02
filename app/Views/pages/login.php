@@ -2,7 +2,7 @@
 <?= $this->include('layouts/header') ?>
 
 <div class="min-h-[80vh] bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md text-center">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md text-center animate-fade-in-up">
         <div class="inline-flex bg-indigo-100 p-3 rounded-full text-indigo-600 mb-4">
             <i data-lucide="home" class="h-8 w-8"></i>
         </div>
@@ -12,9 +12,9 @@
         </p>
     </div>
 
-    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div class="bg-white py-8 px-4 shadow-md sm:rounded-xl sm:px-10 border border-gray-100">
-            <div id="loginAlert" class="hidden mb-4 bg-red-50 border-l-4 border-red-400 p-4 text-sm text-red-700 rounded-lg"></div>
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md animate-fade-in-up">
+        <div class="bg-white py-8 px-4 shadow-md rounded-2xl sm:px-10 border border-gray-100 transition-all">
+            <div id="loginAlert" class="hidden mb-4 bg-red-50 border-l-4 border-red-400 p-4 text-sm text-red-700 rounded-lg animate-fade-in"></div>
 
             <form id="loginForm" class="space-y-6">
                 <div>
@@ -31,7 +31,7 @@
                             type="email"
                             required
                             placeholder="admin@sharda.com"
-                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                         />
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                             type="password"
                             required
                             placeholder="••••••••"
-                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                            class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                         />
                     </div>
                 </div>
@@ -59,8 +59,9 @@
                     <button
                         type="submit"
                         id="loginSubmitBtn"
-                        class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 cursor-pointer transition-colors"
+                        class="w-full flex justify-center items-center gap-2 py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-60 cursor-pointer transition-all"
                     >
+                        <span id="loginSubmitSpinner" class="hidden"><svg class="animate-spin-custom h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></span>
                         <span id="loginSubmitText">Sign In</span>
                     </button>
                 </div>
@@ -82,11 +83,14 @@
         const alertBox = document.getElementById('loginAlert');
         const submitBtn = document.getElementById('loginSubmitBtn');
         const submitText = document.getElementById('loginSubmitText');
+        const submitSpinner = document.getElementById('loginSubmitSpinner');
         const formData = new FormData(this);
 
         submitBtn.disabled = true;
+        if (submitSpinner) submitSpinner.classList.remove('hidden');
         submitText.innerText = 'Signing in...';
         alertBox.classList.add('hidden');
+        if (window.TopLoader) window.TopLoader.start();
 
         try {
             const response = await fetch('<?= base_url('api/login') ?>', {
@@ -112,7 +116,9 @@
             alertBox.classList.remove('hidden');
         } finally {
             submitBtn.disabled = false;
+            if (submitSpinner) submitSpinner.classList.add('hidden');
             submitText.innerText = 'Sign In';
+            if (window.TopLoader) window.TopLoader.complete();
         }
     });
 </script>

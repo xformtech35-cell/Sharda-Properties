@@ -166,7 +166,7 @@ if (!function_exists('get_category_label')) {
         <?php else: ?>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <?php foreach ($properties as $property): ?>
-                    <div class="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col">
+                    <div class="group bg-white rounded-2xl shadow-md card-hover-smooth animate-fade-in-up overflow-hidden border border-gray-100 flex flex-col">
                         <div class="relative h-60 bg-gray-100 overflow-hidden shrink-0">
                             <img
                                 src="<?= htmlspecialchars(get_image_url($property['image_url'])) ?>"

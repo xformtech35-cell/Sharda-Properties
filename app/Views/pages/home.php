@@ -176,7 +176,7 @@ require_once APPPATH . 'Views/layouts/header.php';
         <?php else: ?>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <?php foreach (array_slice($properties, 0, 3) as $property): ?>
-                    <div class="property-card group flex flex-col">
+                    <div class="property-card group flex flex-col animate-fade-in-up">
                         <div class="relative h-64 bg-gray-100 overflow-hidden">
                             <img src="<?= htmlspecialchars(get_image_url($property['image_url'])) ?>" alt="<?= htmlspecialchars($property['title']) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80'" />
                             <div class="absolute top-4 left-4 flex flex-col gap-2">

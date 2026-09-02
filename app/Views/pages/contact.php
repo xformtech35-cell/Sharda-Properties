@@ -121,9 +121,10 @@ require_once APPPATH . 'Views/layouts/header.php';
                         <button
                             type="submit"
                             id="contactSubmitBtn"
-                            class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-semibold px-6 py-3 rounded-lg text-sm cursor-pointer transition-colors shadow-sm"
+                            class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-semibold px-6 py-3 rounded-lg text-sm cursor-pointer transition-all shadow-sm"
                         >
-                            <i data-lucide="send" class="h-4 w-4"></i>
+                            <span id="contactSubmitSpinner" class="hidden"><svg class="animate-spin-custom h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></span>
+                            <i id="contactSubmitIcon" data-lucide="send" class="h-4 w-4"></i>
                             <span id="contactSubmitText">Send Message</span>
                         </button>
                     </div>
@@ -140,11 +141,16 @@ require_once APPPATH . 'Views/layouts/header.php';
         const alertBox = document.getElementById('contactAlert');
         const submitBtn = document.getElementById('contactSubmitBtn');
         const submitText = document.getElementById('contactSubmitText');
+        const submitIcon = document.getElementById('contactSubmitIcon');
+        const submitSpinner = document.getElementById('contactSubmitSpinner');
         const formData = new FormData(this);
 
         submitBtn.disabled = true;
+        if (submitSpinner) submitSpinner.classList.remove('hidden');
+        if (submitIcon) submitIcon.classList.add('hidden');
         submitText.innerText = 'Sending...';
         alertBox.className = 'hidden';
+        if (window.TopLoader) window.TopLoader.start();
 
         try {
             const response = await fetch('<?= API_BASE_URL ?>/enquiries', {
@@ -158,7 +164,7 @@ require_once APPPATH . 'Views/layouts/header.php';
             const data = await response.json();
 
             if (response.ok) {
-                alertBox.className = 'mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg flex items-center gap-3 text-green-800 text-sm font-medium';
+                alertBox.className = 'mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg flex items-center gap-3 text-green-800 text-sm font-medium animate-fade-in';
                 alertBox.innerHTML = `
                     <i data-lucide="check-circle-2" class="h-6 w-6 text-green-600 shrink-0"></i>
                     <div>
@@ -168,15 +174,18 @@ require_once APPPATH . 'Views/layouts/header.php';
                 `;
                 this.reset();
             } else {
-                alertBox.className = 'mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg flex items-center gap-3 text-red-700 text-sm';
+                alertBox.className = 'mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg flex items-center gap-3 text-red-700 text-sm animate-fade-in';
                 alertBox.innerHTML = `<i data-lucide="alert-circle" class="h-6 w-6 text-red-600 shrink-0"></i> <span>${data.error || 'Failed to send enquiry. Please check your inputs.'}</span>`;
             }
         } catch (err) {
-            alertBox.className = 'mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg flex items-center gap-3 text-red-700 text-sm';
+            alertBox.className = 'mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg flex items-center gap-3 text-red-700 text-sm animate-fade-in';
             alertBox.innerHTML = `<i data-lucide="alert-circle" class="h-6 w-6 text-red-600 shrink-0"></i> <span>Network error. Please try again later.</span>`;
         } finally {
             submitBtn.disabled = false;
+            if (submitSpinner) submitSpinner.classList.add('hidden');
+            if (submitIcon) submitIcon.classList.remove('hidden');
             submitText.innerText = 'Send Message';
+            if (window.TopLoader) window.TopLoader.complete();
             if (typeof lucide !== 'undefined') lucide.createIcons();
         }
     });

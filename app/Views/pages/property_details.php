@@ -267,8 +267,9 @@ require_once APPPATH . 'Views/layouts/header.php';
                             <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Message *</label>
                             <textarea name="message" rows="3" required class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none" placeholder="I am interested in this property..."></textarea>
                         </div>
-                        <button type="submit" id="enquirySubmitBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl transition-all cursor-pointer shadow-md shadow-indigo-100">
-                            Send Property Enquiry
+                        <button type="submit" id="enquirySubmitBtn" class="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-bold py-3 px-4 rounded-xl transition-all cursor-pointer shadow-md shadow-indigo-100">
+                            <span id="enquirySubmitSpinner" class="hidden"><svg class="animate-spin-custom h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></span>
+                            <span id="enquirySubmitText">Send Property Enquiry</span>
                         </button>
                     </form>
                 </div>
@@ -281,9 +282,15 @@ require_once APPPATH . 'Views/layouts/header.php';
     document.getElementById('propertyDetailForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const submitBtn = document.getElementById('enquirySubmitBtn');
+        const submitText = document.getElementById('enquirySubmitText');
+        const submitSpinner = document.getElementById('enquirySubmitSpinner');
         const alertBox = document.getElementById('enquiryAlert');
+
         submitBtn.disabled = true;
+        if (submitSpinner) submitSpinner.classList.remove('hidden');
+        if (submitText) submitText.innerText = 'Sending Enquiry...';
         alertBox.classList.add('hidden');
+        if (window.TopLoader) window.TopLoader.start();
 
         const formData = new FormData(this);
         try {
@@ -293,21 +300,24 @@ require_once APPPATH . 'Views/layouts/header.php';
             });
             const data = await res.json();
             if (res.ok) {
-                alertBox.className = 'mb-4 p-3 rounded-lg text-sm font-semibold bg-green-50 text-green-700 border border-green-200';
+                alertBox.className = 'mb-4 p-3 rounded-lg text-sm font-semibold bg-green-50 text-green-700 border border-green-200 animate-fade-in';
                 alertBox.innerText = 'Enquiry sent successfully! Our agent will contact you soon.';
                 alertBox.classList.remove('hidden');
                 this.reset();
             } else {
-                alertBox.className = 'mb-4 p-3 rounded-lg text-sm font-semibold bg-red-50 text-red-700 border border-red-200';
+                alertBox.className = 'mb-4 p-3 rounded-lg text-sm font-semibold bg-red-50 text-red-700 border border-red-200 animate-fade-in';
                 alertBox.innerText = data.error || 'Failed to send enquiry.';
                 alertBox.classList.remove('hidden');
             }
         } catch (err) {
-            alertBox.className = 'mb-4 p-3 rounded-lg text-sm font-semibold bg-red-50 text-red-700 border border-red-200';
+            alertBox.className = 'mb-4 p-3 rounded-lg text-sm font-semibold bg-red-50 text-red-700 border border-red-200 animate-fade-in';
             alertBox.innerText = 'Network error. Please try again.';
             alertBox.classList.remove('hidden');
         } finally {
             submitBtn.disabled = false;
+            if (submitSpinner) submitSpinner.classList.add('hidden');
+            if (submitText) submitText.innerText = 'Send Property Enquiry';
+            if (window.TopLoader) window.TopLoader.complete();
         }
     });
 </script>

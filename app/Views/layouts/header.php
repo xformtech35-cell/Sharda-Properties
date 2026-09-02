@@ -83,9 +83,120 @@ function nav_active_class($path, $param_key = '', $param_val = '') {
     </script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom Smooth Animations & Loaders CSS -->
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Top Progress Bar Loader */
+        #globalTopLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #4f46e5, #818cf8, #a5b4fc);
+            z-index: 99999;
+            transition: width 0.4s ease-out, opacity 0.4s ease-out;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.7);
+        }
+
+        /* Keyframes */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes spinSlow {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Skeleton Loading Utility */
+        .skeleton {
+            background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 37%, #f3f4f6 63%);
+            background-size: 400% 100%;
+            animation: shimmer 1.4s ease infinite;
+            border-radius: 0.5rem;
+        }
+
+        /* Utility Animation Classes */
+        .animate-fade-in-up {
+            animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out forwards;
+        }
+
+        .animate-scale-in {
+            animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-spin-custom {
+            animation: spinSlow 0.8s linear infinite;
+        }
+
+        /* Card Hover Transition */
+        .card-hover-smooth {
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+        }
+        .card-hover-smooth:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 35px -10px rgba(79, 70, 229, 0.15);
+        }
+
+        /* Smooth Mobile Drawer */
+        #mobileMenuDrawer {
+            transition: max-height 0.35s ease-in-out, opacity 0.3s ease-in-out;
+            overflow: hidden;
+        }
+        #mobileMenuDrawer.drawer-closed {
+            max-height: 0;
+            opacity: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            pointer-events: none;
+        }
+        #mobileMenuDrawer.drawer-open {
+            max-height: 500px;
+            opacity: 1;
+        }
+    </style>
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen font-sans text-gray-800 antialiased">
     
+    <!-- Top Progress Bar Loader -->
+    <div id="globalTopLoader"></div>
+
     <!-- Navbar -->
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -124,7 +235,7 @@ function nav_active_class($path, $param_key = '', $param_val = '') {
                 <!-- Admin Action Button / Auth State -->
                 <div class="hidden lg:flex items-center gap-2">
                     <span id="navAuthContainer">
-                        <a href="<?= base_url('login') ?>" id="navLoginBtn" class="flex items-center gap-1.5 bg-indigo-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-indigo-700 transition-colors shadow-sm cursor-pointer">
+                        <a href="<?= base_url('login') ?>" id="navLoginBtn" class="flex items-center gap-1.5 bg-indigo-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-indigo-700 transition-all shadow-sm hover:shadow cursor-pointer">
                             <i data-lucide="log-in" class="h-4 w-4"></i>
                             Admin Portal
                         </a>
@@ -133,7 +244,7 @@ function nav_active_class($path, $param_key = '', $param_val = '') {
 
                 <!-- Mobile Hamburger Toggle -->
                 <div class="flex lg:hidden items-center gap-2">
-                    <button id="mobileMenuBtn" class="p-2 rounded-xl text-gray-600 hover:bg-gray-100 focus:outline-none cursor-pointer">
+                    <button id="mobileMenuBtn" class="p-2 rounded-xl text-gray-600 hover:bg-gray-100 focus:outline-none cursor-pointer transition-colors" aria-label="Toggle Navigation">
                         <i data-lucide="menu" class="h-6 w-6"></i>
                     </button>
                 </div>
@@ -142,7 +253,7 @@ function nav_active_class($path, $param_key = '', $param_val = '') {
         </div>
 
         <!-- Mobile Drawer Navigation -->
-        <div id="mobileMenuDrawer" class="hidden lg:hidden border-t border-gray-100 bg-white px-4 pt-3 pb-6 space-y-2 shadow-lg">
+        <div id="mobileMenuDrawer" class="drawer-closed lg:hidden border-t border-gray-100 bg-white px-4 space-y-2 shadow-lg">
             <a href="<?= base_url('/') ?>" class="block <?= nav_active_class('home') ?>">Home</a>
             <a href="<?= base_url('about') ?>" class="block <?= nav_active_class('about') ?>">About Us</a>
             <a href="<?= base_url('/?flat_type=resale') ?>" class="block <?= nav_active_class('/', 'flat_type', 'resale') ?>">Resale Flats</a>
@@ -152,8 +263,8 @@ function nav_active_class($path, $param_key = '', $param_val = '') {
             <a href="<?= base_url('clients') ?>" class="block <?= nav_active_class('clients') ?>">Clients</a>
             <a href="<?= base_url('partners') ?>" class="block <?= nav_active_class('partners') ?>">Partners</a>
             <a href="<?= base_url('contact') ?>" class="block <?= nav_active_class('contact') ?>">Contact Us</a>
-            <div class="pt-2 border-t border-gray-100">
-                <a href="<?= base_url('login') ?>" id="mobileNavLoginBtn" class="flex items-center justify-center gap-2 bg-indigo-600 text-white py-2.5 rounded-xl text-xs font-bold">
+            <div class="pt-2 border-t border-gray-100 pb-4">
+                <a href="<?= base_url('login') ?>" id="mobileNavLoginBtn" class="flex items-center justify-center gap-2 bg-indigo-600 text-white py-2.5 rounded-xl text-xs font-bold shadow-sm">
                     <i data-lucide="log-in" class="h-4 w-4"></i> Admin Portal
                 </a>
             </div>
@@ -161,13 +272,58 @@ function nav_active_class($path, $param_key = '', $param_val = '') {
     </nav>
 
     <script>
+        // Global Loader Utilities
+        window.TopLoader = {
+            element: null,
+            init: function() {
+                this.element = document.getElementById('globalTopLoader');
+            },
+            start: function() {
+                if (!this.element) this.init();
+                if (!this.element) return;
+                this.element.style.opacity = '1';
+                this.element.style.width = '30%';
+                setTimeout(() => {
+                    if (this.element.style.width === '30%') {
+                        this.element.style.width = '70%';
+                    }
+                }, 200);
+            },
+            complete: function() {
+                if (!this.element) this.init();
+                if (!this.element) return;
+                this.element.style.width = '100%';
+                setTimeout(() => {
+                    this.element.style.opacity = '0';
+                    setTimeout(() => {
+                        this.element.style.width = '0%';
+                    }, 400);
+                }, 250);
+            }
+        };
+
+        // Trigger loader on page unload / link navigation
+        window.addEventListener('beforeunload', function() {
+            window.TopLoader.start();
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
-            // Mobile Menu Toggle
+            window.TopLoader.complete();
+
+            // Mobile Menu Drawer Toggle with smooth height animation
             const mobileBtn = document.getElementById('mobileMenuBtn');
             const mobileDrawer = document.getElementById('mobileMenuDrawer');
             if (mobileBtn && mobileDrawer) {
+                // Remove hidden class so drawer transitions properly
+                mobileDrawer.classList.remove('hidden');
                 mobileBtn.addEventListener('click', function() {
-                    mobileDrawer.classList.toggle('hidden');
+                    if (mobileDrawer.classList.contains('drawer-closed')) {
+                        mobileDrawer.classList.remove('drawer-closed');
+                        mobileDrawer.classList.add('drawer-open');
+                    } else {
+                        mobileDrawer.classList.remove('drawer-open');
+                        mobileDrawer.classList.add('drawer-closed');
+                    }
                 });
             }
 
@@ -180,7 +336,7 @@ function nav_active_class($path, $param_key = '', $param_val = '') {
             if (token && authContainer) {
                 authContainer.innerHTML = `
                     <div class="flex items-center gap-2">
-                    <a href="${adminHref}" class="flex items-center gap-1.5 bg-indigo-600 text-white px-3.5 py-2 rounded-xl text-xs font-bold hover:bg-indigo-700 transition-colors shadow-sm">
+                    <a href="${adminHref}" class="flex items-center gap-1.5 bg-indigo-600 text-white px-3.5 py-2 rounded-xl text-xs font-bold hover:bg-indigo-700 transition-all shadow-sm">
                         <i data-lucide="layout-dashboard" class="h-4 w-4"></i> Dashboard
                     </a>
                     <button onclick="handleNavLogout()" class="text-xs font-bold text-red-600 hover:bg-red-50 p-2 rounded-xl transition-colors cursor-pointer" title="Sign Out">
@@ -207,4 +363,4 @@ function nav_active_class($path, $param_key = '', $param_val = '') {
         }
     </script>
 
-    <main class="flex-grow">
+    <main class="flex-grow animate-fade-in">
