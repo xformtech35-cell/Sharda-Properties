@@ -150,20 +150,73 @@ function nav_active_class($path, $param_key = '', $param_val = '') {
 
         /* Utility Animation Classes */
         .animate-fade-in-up {
-            animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
         .animate-fade-in {
-            animation: fadeIn 0.3s ease-in-out forwards;
+            animation: fadeIn 0.4s ease-in-out both;
         }
 
         .animate-scale-in {
-            animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: scaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
         .animate-spin-custom {
             animation: spinSlow 0.8s linear infinite;
         }
+
+        /* Scroll Reveal Animations */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .scroll-reveal-left {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .scroll-reveal-left.revealed {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .scroll-reveal-right {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .scroll-reveal-right.revealed {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .scroll-reveal-scale {
+            opacity: 0;
+            transform: scale(0.92);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .scroll-reveal-scale.revealed {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Stagger Delay Classes */
+        .delay-100 { animation-delay: 0.1s; transition-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; transition-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; transition-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; transition-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; transition-delay: 0.5s; }
+        .delay-600 { animation-delay: 0.6s; transition-delay: 0.6s; }
 
         /* Card Hover Transition */
         .card-hover-smooth {
@@ -352,7 +405,52 @@ function nav_active_class($path, $param_key = '', $param_val = '') {
             }
 
             if (typeof lucide !== 'undefined') lucide.createIcons();
+            
+            // Initialize Scroll Reveal Observer
+            initScrollReveal();
         });
+
+        // Global Scroll Reveal Engine (Excludes Hero Sections)
+        function initScrollReveal() {
+            const targets = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, main > section:not(:first-of-type) > div, .grid > div');
+            if (!targets.length) return;
+
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '0px 0px -30px 0px',
+                threshold: 0.1
+            });
+
+            targets.forEach((el) => {
+                // Skip hero section and top banner elements so hero remains untouched and visible immediately
+                if (el.closest('section:first-of-type') || el.closest('.hero-section') || el.closest('[class*="bg-indigo-950"]') || el.closest('[class*="bg-indigo-900"]')) {
+                    return;
+                }
+
+                if (!el.classList.contains('scroll-reveal') &&
+                    !el.classList.contains('scroll-reveal-left') &&
+                    !el.classList.contains('scroll-reveal-right') &&
+                    !el.classList.contains('scroll-reveal-scale')) {
+                    el.classList.add('scroll-reveal');
+                }
+
+                // Add stagger effect for grid items
+                if (el.parentElement && el.parentElement.classList.contains('grid')) {
+                    const idx = Array.from(el.parentElement.children).indexOf(el);
+                    if (idx > 0 && idx < 6) {
+                        el.style.transitionDelay = (idx * 0.07) + 's';
+                    }
+                }
+                observer.observe(el);
+            });
+        }
 
         function handleNavLogout() {
             if (confirm('Sign out of Admin Portal?')) {

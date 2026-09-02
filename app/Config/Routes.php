@@ -67,4 +67,16 @@ $routes->group('api', function($routes) {
     $routes->get('testimonials', 'Api\Testimonials::index');
     $routes->post('testimonials', 'Api\Testimonials::create', ['filter' => 'auth']);
     $routes->delete('testimonials/(:num)', 'Api\Testimonials::delete/$1', ['filter' => 'auth']);
+
+    // Partners & Clients routes
+    $routes->get('partners', 'Api\Partners::index');
+    $routes->post('partners', 'Api\Partners::create', ['filter' => 'auth']);
+    $routes->post('partners/(:num)', 'Api\Partners::update/$1', ['filter' => 'auth']);
+    $routes->put('partners/(:num)', 'Api\Partners::update/$1', ['filter' => 'auth']);
+    $routes->delete('partners/(:num)', 'Api\Partners::delete/$1', ['filter' => 'auth']);
+
+    // Dynamic Categories routes (for Properties & Partners)
+    $routes->get('categories', 'Api\Categories::index');
+    $routes->post('categories', 'Api\Categories::create', ['filter' => 'auth']);
+    $routes->delete('categories/(:num)', 'Api\Categories::delete/$1', ['filter' => 'auth']);
 });

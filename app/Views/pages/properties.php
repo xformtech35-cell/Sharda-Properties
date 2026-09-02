@@ -67,17 +67,21 @@ if (!function_exists('get_category_label')) {
 <div class="bg-gray-50 min-h-screen pb-16">
     
     <!-- Page Header & Filter Section -->
-    <section class="bg-gradient-to-r from-indigo-950 via-indigo-900 to-indigo-950 text-white py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <section class="bg-gradient-to-r from-indigo-950 via-indigo-900 to-indigo-950 text-white py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden hero-section">
+        <!-- Glowing background accent orbs -->
+        <div class="absolute -top-20 -left-20 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+        <div class="absolute -bottom-20 -right-20 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl pointer-events-none animate-pulse" style="animation-delay: 2s;"></div>
+
         <div class="absolute inset-0 opacity-15 bg-[url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center"></div>
         <div class="max-w-7xl mx-auto text-center relative z-10 space-y-4">
-            <span class="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-xs font-semibold tracking-wider uppercase border border-white/10">Full Catalog</span>
-            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">Explore All Properties</h1>
-            <p class="text-indigo-200 text-base max-w-2xl mx-auto">
+            <span class="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-xs font-semibold tracking-wider uppercase border border-white/10 animate-fade-in-up">Full Catalog</span>
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight animate-fade-in-up delay-100">Explore All Properties</h1>
+            <p class="text-indigo-200 text-base max-w-2xl mx-auto animate-fade-in-up delay-200">
                 Find verified NA plots, new project flats, resale apartments, and commercial offices.
             </p>
 
-            <!-- Search & Filter Form -->
-            <form action="<?= base_url('properties') ?>" method="GET" class="mt-8 max-w-4xl mx-auto bg-white p-2.5 rounded-2xl shadow-2xl flex flex-col md:flex-row gap-2 text-gray-800 border border-indigo-100/20">
+            <!-- Search & Filter Form with entrance & hover glow -->
+            <form action="<?= base_url('properties') ?>" method="GET" class="mt-8 max-w-4xl mx-auto bg-white p-2.5 rounded-2xl shadow-2xl flex flex-col md:flex-row gap-2 text-gray-800 border border-indigo-100/20 animate-fade-in-up delay-300 hover:border-indigo-400/40 transition-all">
                 <div class="flex-grow flex items-center px-3 border-b md:border-b-0 md:border-r border-gray-200">
                     <i data-lucide="search" class="h-5 w-5 text-gray-400 mr-2 shrink-0"></i>
                     <input
@@ -92,7 +96,7 @@ if (!function_exists('get_category_label')) {
                 <div class="flex flex-wrap items-center px-2 gap-2">
                     <select
                         name="category"
-                        class="py-2.5 bg-gray-50 text-gray-700 focus:outline-none text-xs font-semibold cursor-pointer border border-gray-200 rounded-xl px-3"
+                        class="py-2.5 bg-gray-50 text-gray-700 focus:outline-none text-xs font-semibold cursor-pointer border border-gray-200 rounded-xl px-3 hover:bg-gray-100 transition"
                         onchange="this.form.submit()"
                     >
                         <option value="">All Categories</option>
@@ -103,7 +107,7 @@ if (!function_exists('get_category_label')) {
 
                     <select
                         name="purpose"
-                        class="py-2.5 bg-gray-50 text-gray-700 focus:outline-none text-xs font-semibold cursor-pointer border border-gray-200 rounded-xl px-3"
+                        class="py-2.5 bg-gray-50 text-gray-700 focus:outline-none text-xs font-semibold cursor-pointer border border-gray-200 rounded-xl px-3 hover:bg-gray-100 transition"
                         onchange="this.form.submit()"
                     >
                         <option value="">All Purposes</option>
@@ -113,7 +117,7 @@ if (!function_exists('get_category_label')) {
 
                     <select
                         name="property_type"
-                        class="py-2.5 bg-gray-50 text-gray-700 focus:outline-none text-xs font-semibold cursor-pointer border border-gray-200 rounded-xl px-3"
+                        class="py-2.5 bg-gray-50 text-gray-700 focus:outline-none text-xs font-semibold cursor-pointer border border-gray-200 rounded-xl px-3 hover:bg-gray-100 transition"
                         onchange="this.form.submit()"
                     >
                         <option value="">All Types</option>
@@ -124,7 +128,7 @@ if (!function_exists('get_category_label')) {
 
                 <button
                     type="submit"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3.5 rounded-xl font-bold text-sm transition-colors cursor-pointer shrink-0 shadow-md flex items-center justify-center gap-2"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3.5 rounded-xl font-bold text-sm transition-all cursor-pointer shrink-0 shadow-md flex items-center justify-center gap-2 hover:scale-102"
                 >
                     <i data-lucide="search" class="h-4 w-4"></i> Search
                 </button>
@@ -134,7 +138,7 @@ if (!function_exists('get_category_label')) {
 
     <!-- Properties Grid Section -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-8">
+        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-8 scroll-reveal">
             <div>
                 <h2 class="text-2xl font-bold text-gray-900">
                     Property Listings
@@ -145,7 +149,7 @@ if (!function_exists('get_category_label')) {
             <div class="flex items-center gap-3">
                 <span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1.5 rounded-full border border-indigo-100"><?= count($properties) ?> Properties Available</span>
                 <?php if ($search || $category || $purpose || $property_type || $flat_type): ?>
-                    <a href="<?= base_url('properties') ?>" class="text-xs text-indigo-600 font-bold hover:underline cursor-pointer flex items-center gap-1">
+                    <a href="<?= base_url('properties') ?>" class="text-xs text-indigo-600 font-bold hover:underline cursor-pointer flex items-center gap-1 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-2xs">
                         <i data-lucide="rotate-ccw" class="h-3.5 w-3.5"></i> Clear Filters
                     </a>
                 <?php endif; ?>
@@ -153,7 +157,7 @@ if (!function_exists('get_category_label')) {
         </div>
 
         <?php if (empty($properties)): ?>
-            <div class="bg-white rounded-3xl text-center py-20 px-4 border border-gray-100 space-y-4 shadow-sm">
+            <div class="bg-white rounded-3xl text-center py-20 px-4 border border-gray-100 space-y-4 shadow-sm scroll-reveal">
                 <div class="bg-indigo-50 p-4 rounded-full inline-block text-indigo-600">
                     <i data-lucide="building-2" class="h-10 w-10"></i>
                 </div>
@@ -165,8 +169,8 @@ if (!function_exists('get_category_label')) {
             </div>
         <?php else: ?>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <?php foreach ($properties as $property): ?>
-                    <div class="group bg-white rounded-2xl shadow-md card-hover-smooth animate-fade-in-up overflow-hidden border border-gray-100 flex flex-col">
+                <?php foreach ($properties as $index => $property): ?>
+                    <div class="group bg-white rounded-2xl shadow-md card-hover-smooth scroll-reveal delay-<?= (($index % 6) + 1) * 100 ?> overflow-hidden border border-gray-100 flex flex-col">
                         <div class="relative h-60 bg-gray-100 overflow-hidden shrink-0">
                             <img
                                 src="<?= htmlspecialchars(get_image_url($property['image_url'])) ?>"
@@ -175,7 +179,7 @@ if (!function_exists('get_category_label')) {
                                 onerror="this.src='https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80'"
                             />
                             <div class="absolute top-4 left-4 flex flex-col gap-1.5 items-start z-10">
-                                <span class="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider text-white shadow-md <?= $property['purpose'] === 'sell' ? 'bg-green-600' : 'bg-blue-600' ?>">
+                                <span class="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider text-white shadow-md <?= $property['purpose'] === 'sell' ? 'bg-emerald-600' : 'bg-sky-600' ?>">
                                     For <?= $property['purpose'] === 'sell' ? 'Sell' : 'Rent' ?>
                                 </span>
                                 <span class="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-gray-900/80 text-white backdrop-blur-xs shadow-md">
@@ -214,7 +218,7 @@ if (!function_exists('get_category_label')) {
                                     </div>
                                 </div>
 
-                                <a href="<?= base_url('properties/') ?><?= $property['id'] ?>" class="block text-center bg-gray-50 hover:bg-indigo-600 hover:text-white text-indigo-700 font-bold py-3 rounded-xl transition-all shadow-2xs">
+                                <a href="<?= base_url('properties/') ?><?= $property['id'] ?>" class="block text-center bg-gray-50 hover:bg-indigo-600 hover:text-white text-indigo-700 font-bold py-3 rounded-xl transition-all shadow-2xs border border-gray-100 group-hover:border-indigo-300">
                                     View Full Details
                                 </a>
                             </div>

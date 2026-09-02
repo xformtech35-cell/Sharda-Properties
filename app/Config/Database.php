@@ -31,7 +31,7 @@ class Database extends Config
         'password'     => '',
         'database'     => 'sharda_properties',
         'DBDriver'     => 'MySQLi',
-        'DBPrefix'     => '',
+        'DBPrefix'     => 'sp_',
         'pConnect'     => false,
         'DBDebug'      => true,
         'charset'      => 'utf8mb4',
@@ -57,7 +57,7 @@ class Database extends Config
     public array $sqlite = [
         'database'    => WRITEPATH . 'database.sqlite',
         'DBDriver'    => 'SQLite3',
-        'DBPrefix'    => '',
+        'DBPrefix'    => 'sp_',
         'DBDebug'     => true,
         'swapPre'     => '',
         'failover'    => [],

@@ -14,7 +14,18 @@
     .shadow-soft { box-shadow: 0 20px 40px -12px rgba(0,0,0,0.08); }
     .transition-smooth { transition: all 0.25s cubic-bezier(0.2, 0, 0, 1); }
     .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 24px 48px -12px rgba(79, 70, 229, 0.25); }
-    .gradient-text { background: linear-gradient(135deg, #818cf8, #c7d2fe, #f0f4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .gradient-text {
+      background: linear-gradient(135deg, #a5b4fc, #e0e7ff, #818cf8, #ffffff, #a5b4fc);
+      background-size: 250% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shineText 4s linear infinite;
+    }
+    @keyframes shineText {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
     .btn-primary { background: #4f46e5; transition: all 0.2s; }
     .btn-primary:hover { background: #4338ca; transform: scale(1.02); box-shadow: 0 8px 24px rgba(79,70,229,0.4); }
     .property-card { border-radius: 28px; overflow: hidden; border: 1px solid rgba(229, 231, 235, 0.5); background: white; transition: all 0.3s; }
@@ -95,33 +106,37 @@ require_once APPPATH . 'Views/layouts/header.php';
 <!-- ============================================================ -->
 <div class="bg-gray-50/80 min-h-screen">
 
-    <!-- 1. HERO – refined with glassmorphism, gradient, grid pattern -->
-    <section class="relative bg-indigo-950 text-white overflow-hidden px-4 py-20 md:py-28">
+    <!-- 1. HERO – refined with glassmorphism, gradient, grid pattern & smooth text animations -->
+    <section class="relative bg-indigo-950 text-white overflow-hidden px-4 py-20 md:py-28 hero-section">
+        <!-- Glowing background accent orbs -->
+        <div class="absolute -top-24 -left-24 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+        <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl pointer-events-none animate-pulse" style="animation-delay: 2s;"></div>
+        
         <div class="absolute inset-0 bg-grid-pattern opacity-20"></div>
         <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center opacity-10"></div>
         <div class="relative z-10 max-w-7xl mx-auto text-center space-y-8">
-            <div class="inline-flex items-center gap-2 bg-indigo-800/60 backdrop-blur-md px-5 py-2 rounded-full border border-white/20 text-xs font-bold uppercase tracking-widest text-indigo-200">
-                <span class="w-2 h-2 bg-emerald-400 rounded-full inline-block animate-pulse"></span> Premium Real Estate Consultancy
+            <div class="inline-flex items-center gap-2 bg-indigo-800/60 backdrop-blur-md px-5 py-2 rounded-full border border-white/20 text-xs font-bold uppercase tracking-widest text-indigo-200 animate-fade-in-up">
+                <span class="w-2.5 h-2.5 bg-emerald-400 rounded-full inline-block animate-pulse shadow-sm shadow-emerald-400"></span> Premium Real Estate Consultancy
             </div>
-            <h1 class="text-4xl sm:text-6xl md:text-7xl font-black leading-[1.1] tracking-tight">
+            <h1 class="text-4xl sm:text-6xl md:text-7xl font-black leading-[1.1] tracking-tight animate-fade-in-up delay-100">
                 Find Your Dream <br class="sm:hidden" />
                 <span class="gradient-text">Property</span> With Sharda
             </h1>
-            <p class="text-base sm:text-xl text-indigo-100/90 max-w-3xl mx-auto font-light leading-relaxed">
+            <p class="text-base sm:text-xl text-indigo-100/90 max-w-3xl mx-auto font-light leading-relaxed animate-fade-in-up delay-200">
                 Verified NA plots, new project flats, resale homes, and commercial offices — complete legal authenticity.
             </p>
 
             <!-- Quick filter pills – aesthetic -->
-            <div class="flex flex-wrap justify-center gap-2.5 pt-2">
-                <a href="<?= base_url('/') ?>" class="px-5 py-2 rounded-full text-xs font-bold transition-all <?= empty($category) && empty($flat_type) && empty($property_type) ? 'bg-white text-indigo-900 shadow-lg' : 'bg-indigo-800/40 text-indigo-100 hover:bg-indigo-700/70 border border-white/20' ?>">All</a>
-                <a href="<?= base_url('/') ?>?category=na_plot" class="px-5 py-2 rounded-full text-xs font-bold transition-all <?= $category === 'na_plot' ? 'bg-white text-indigo-900 shadow-lg' : 'bg-indigo-800/40 text-indigo-100 hover:bg-indigo-700/70 border border-white/20' ?>">NA Plots</a>
-                <a href="<?= base_url('/') ?>?flat_type=resale" class="px-5 py-2 rounded-full text-xs font-bold transition-all <?= $flat_type === 'resale' ? 'bg-white text-indigo-900 shadow-lg' : 'bg-indigo-800/40 text-indigo-100 hover:bg-indigo-700/70 border border-white/20' ?>">Resale Flats</a>
-                <a href="<?= base_url('/') ?>?flat_type=new" class="px-5 py-2 rounded-full text-xs font-bold transition-all <?= $flat_type === 'new' ? 'bg-white text-indigo-900 shadow-lg' : 'bg-indigo-800/40 text-indigo-100 hover:bg-indigo-700/70 border border-white/20' ?>">New Flats</a>
-                <a href="<?= base_url('/') ?>?property_type=commercial" class="px-5 py-2 rounded-full text-xs font-bold transition-all <?= $property_type === 'commercial' ? 'bg-white text-indigo-900 shadow-lg' : 'bg-indigo-800/40 text-indigo-100 hover:bg-indigo-700/70 border border-white/20' ?>">Commercial</a>
+            <div class="flex flex-wrap justify-center gap-2.5 pt-2 animate-fade-in-up delay-300">
+                <a href="<?= base_url('/') ?>" class="px-5 py-2 rounded-full text-xs font-bold transition-all hover:scale-105 <?= empty($category) && empty($flat_type) && empty($property_type) ? 'bg-white text-indigo-900 shadow-lg' : 'bg-indigo-800/40 text-indigo-100 hover:bg-indigo-700/70 border border-white/20' ?>">All</a>
+                <a href="<?= base_url('/') ?>?category=na_plot" class="px-5 py-2 rounded-full text-xs font-bold transition-all hover:scale-105 <?= $category === 'na_plot' ? 'bg-white text-indigo-900 shadow-lg' : 'bg-indigo-800/40 text-indigo-100 hover:bg-indigo-700/70 border border-white/20' ?>">NA Plots</a>
+                <a href="<?= base_url('/') ?>?flat_type=resale" class="px-5 py-2 rounded-full text-xs font-bold transition-all hover:scale-105 <?= $flat_type === 'resale' ? 'bg-white text-indigo-900 shadow-lg' : 'bg-indigo-800/40 text-indigo-100 hover:bg-indigo-700/70 border border-white/20' ?>">Resale Flats</a>
+                <a href="<?= base_url('/') ?>?flat_type=new" class="px-5 py-2 rounded-full text-xs font-bold transition-all hover:scale-105 <?= $flat_type === 'new' ? 'bg-white text-indigo-900 shadow-lg' : 'bg-indigo-800/40 text-indigo-100 hover:bg-indigo-700/70 border border-white/20' ?>">New Flats</a>
+                <a href="<?= base_url('/') ?>?property_type=commercial" class="px-5 py-2 rounded-full text-xs font-bold transition-all hover:scale-105 <?= $property_type === 'commercial' ? 'bg-white text-indigo-900 shadow-lg' : 'bg-indigo-800/40 text-indigo-100 hover:bg-indigo-700/70 border border-white/20' ?>">Commercial</a>
             </div>
 
-            <!-- Search bar – premium glass -->
-            <form action="<?= base_url('/') ?>" method="GET" class="mt-10 max-w-4xl mx-auto bg-white/10 backdrop-blur-xl p-2.5 rounded-3xl shadow-2xl border border-white/20 flex flex-col md:flex-row gap-2 text-gray-800">
+            <!-- Search bar – premium glass with hover glow -->
+            <form action="<?= base_url('/') ?>" method="GET" class="mt-10 max-w-4xl mx-auto bg-white/10 backdrop-blur-xl p-2.5 rounded-3xl shadow-2xl border border-white/20 flex flex-col md:flex-row gap-2 text-gray-800 animate-fade-in-up delay-400 hover:border-indigo-400/40 transition-all">
                 <div class="flex-grow flex items-center px-4 py-1 bg-white/90 rounded-2xl md:rounded-l-2xl md:rounded-r-none border-0">
                     <i data-lucide="search" class="h-5 w-5 text-indigo-400 mr-3 shrink-0"></i>
                     <input type="text" name="search" placeholder="Search location, project, keyword..." class="w-full py-3 bg-transparent focus:outline-none text-sm font-medium text-gray-800 placeholder:text-gray-400" value="<?= htmlspecialchars($search) ?>" />
@@ -153,7 +168,7 @@ require_once APPPATH . 'Views/layouts/header.php';
 
     <!-- 2. FEATURED PROPERTIES – refined cards -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-12">
+        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-12 scroll-reveal">
             <div>
                 <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50/80 px-4 py-1.5 rounded-full border border-indigo-100">✨ top picks</span>
                 <h2 class="text-4xl font-black text-gray-900 tracking-tight mt-3">Featured Properties</h2>
@@ -168,15 +183,15 @@ require_once APPPATH . 'Views/layouts/header.php';
         </div>
 
         <?php if (empty($properties)): ?>
-            <div class="bg-white rounded-3xl text-center py-20 px-4 border border-gray-100 shadow-soft">
+            <div class="bg-white rounded-3xl text-center py-20 px-4 border border-gray-100 shadow-soft scroll-reveal">
                 <div class="bg-indigo-50 p-5 rounded-full inline-block text-indigo-600"><i data-lucide="building-2" class="h-12 w-12"></i></div>
                 <h3 class="text-2xl font-bold text-gray-800 mt-4">No Featured Listings</h3>
                 <a href="<?= base_url('properties') ?>" class="inline-flex items-center gap-2 btn-primary text-white px-6 py-3 rounded-xl text-sm font-bold mt-4">View All Properties</a>
             </div>
         <?php else: ?>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <?php foreach (array_slice($properties, 0, 3) as $property): ?>
-                    <div class="property-card group flex flex-col animate-fade-in-up">
+                <?php foreach (array_slice($properties, 0, 3) as $index => $property): ?>
+                    <div class="property-card group flex flex-col scroll-reveal card-hover-smooth delay-<?= ($index + 1) * 100 ?>">
                         <div class="relative h-64 bg-gray-100 overflow-hidden">
                             <img src="<?= htmlspecialchars(get_image_url($property['image_url'])) ?>" alt="<?= htmlspecialchars($property['title']) ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80'" />
                             <div class="absolute top-4 left-4 flex flex-col gap-2">
@@ -202,47 +217,56 @@ require_once APPPATH . 'Views/layouts/header.php';
                     </div>
                 <?php endforeach; ?>
             </div>
-            <div class="mt-14 text-center">
+            <div class="mt-14 text-center scroll-reveal">
                 <a href="<?= base_url('properties') ?>" class="inline-flex items-center gap-3 btn-primary text-white font-extrabold px-8 py-4 rounded-2xl shadow-lg transition-all group">View All Properties (<?= count($properties) ?>) <i data-lucide="arrow-right" class="h-4 w-4 group-hover:translate-x-1 transition-transform"></i></a>
             </div>
         <?php endif; ?>
     </section>
 
-    <!-- 3. PROPERTY TYPES – modern cards -->
+    <!-- 3. PROPERTY TYPES – modern cards with smooth animations -->
     <section class="bg-white/80 py-20 border-y border-gray-100/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-            <div class="text-center"><span class="text-xs font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-4 py-1.5 rounded-full border border-indigo-100">explore options</span><h2 class="text-4xl font-black text-gray-900 mt-3">Property Types</h2><p class="text-gray-500 text-sm mt-1">Find categories designed for your lifestyle or business</p></div>
+            <div class="text-center scroll-reveal">
+                <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-4 py-1.5 rounded-full border border-indigo-100">explore options</span>
+                <h2 class="text-4xl font-black text-gray-900 mt-3">Property Types</h2>
+                <p class="text-gray-500 text-sm mt-1">Find categories designed for your lifestyle or business</p>
+            </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <?php $types = [
                     ['url' => '?category=na_plot', 'icon' => 'map-pin', 'label' => 'NA Plots', 'desc' => 'Non-Agricultural approved clear title land'],
                     ['url' => '?flat_type=resale', 'icon' => 'home', 'label' => 'Resale Flats', 'desc' => 'Ready-to-move 1/2/3 BHK apartments'],
                     ['url' => '?flat_type=new', 'icon' => 'building-2', 'label' => 'New Projects', 'desc' => 'Upcoming tower launches with amenities'],
                     ['url' => '?property_type=commercial', 'icon' => 'briefcase', 'label' => 'Commercial Spaces', 'desc' => 'Offices, retail shops, co-working'],
-                ]; foreach ($types as $t): ?>
-                <a href="<?= base_url($t['url']) ?>" class="group bg-white p-7 rounded-3xl border border-gray-100 hover:border-indigo-200 hover:shadow-soft transition-smooth hover-lift space-y-4">
-                    <div class="bg-indigo-50 text-indigo-700 p-4 rounded-2xl inline-block group-hover:bg-indigo-600 group-hover:text-white transition-colors"><i data-lucide="<?= $t['icon'] ?>" class="h-7 w-7"></i></div>
-                    <div><h3 class="font-bold text-gray-900 text-xl group-hover:text-indigo-600 transition-colors"><?= $t['label'] ?></h3><p class="text-gray-500 text-xs mt-1"><?= $t['desc'] ?></p></div>
-                    <span class="text-xs font-bold text-indigo-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">Browse <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i></span>
+                ]; foreach ($types as $idx => $t): ?>
+                <a href="<?= base_url($t['url']) ?>" class="group bg-white p-7 rounded-3xl border border-gray-100 hover:border-indigo-200 hover:shadow-soft transition-all card-hover-smooth scroll-reveal delay-<?= ($idx + 1) * 100 ?> space-y-4">
+                    <div class="bg-indigo-50 text-indigo-700 p-4 rounded-2xl inline-block group-hover:bg-indigo-600 group-hover:text-white group-hover:scale-110 transition-all duration-300 shadow-xs">
+                        <i data-lucide="<?= $t['icon'] ?>" class="h-7 w-7"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-900 text-xl group-hover:text-indigo-600 transition-colors"><?= $t['label'] ?></h3>
+                        <p class="text-gray-500 text-xs mt-1"><?= $t['desc'] ?></p>
+                    </div>
+                    <span class="text-xs font-bold text-indigo-600 flex items-center gap-1 group-hover:translate-x-1.5 transition-transform">Browse <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i></span>
                 </a>
                 <?php endforeach; ?>
             </div>
         </div>
     </section>
 
-    <!-- 4. POPULAR LOCATIONS – refined image overlays -->
+    <!-- 4. POPULAR LOCATIONS – refined image overlays with scroll reveal -->
     <section class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        <div class="text-center"><span class="text-xs font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-4 py-1.5 rounded-full border border-indigo-100">prime areas</span><h2 class="text-4xl font-black text-gray-900 mt-3">Explore Popular Locations</h2><p class="text-gray-500 text-sm">Top-rated residential & commercial hubs</p></div>
+        <div class="text-center scroll-reveal"><span class="text-xs font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-4 py-1.5 rounded-full border border-indigo-100">prime areas</span><h2 class="text-4xl font-black text-gray-900 mt-3">Explore Popular Locations</h2><p class="text-gray-500 text-sm">Top-rated residential & commercial hubs</p></div>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             <?php $locs = [
                 ['name' => 'Downtown City', 'desc' => 'Commercial & High-rise Flats', 'img' => 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80'],
                 ['name' => 'Green Valley', 'desc' => 'Clear Title NA Plots & Villas', 'img' => 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=80'],
                 ['name' => 'Metro Central', 'desc' => 'Luxury Resale & New Apartments', 'img' => 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&q=80'],
                 ['name' => 'Airport Road Hub', 'desc' => 'Commercial IT & Retail Offices', 'img' => 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80'],
-            ]; foreach ($locs as $loc): ?>
-            <a href="<?= base_url('/') ?>?search=<?= urlencode($loc['name']) ?>" class="group relative rounded-3xl overflow-hidden shadow-lg h-72 block border border-gray-100">
+            ]; foreach ($locs as $idx => $loc): ?>
+            <a href="<?= base_url('/') ?>?search=<?= urlencode($loc['name']) ?>" class="group relative rounded-3xl overflow-hidden shadow-lg h-72 block border border-gray-100 scroll-reveal delay-<?= ($idx + 1) * 100 ?> card-hover-smooth">
                 <img src="<?= $loc['img'] ?>" alt="<?= $loc['name'] ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 <div class="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-gray-900/30 to-transparent p-6 flex flex-col justify-end">
-                    <h3 class="font-extrabold text-2xl text-white"><?= $loc['name'] ?></h3>
+                    <h3 class="font-extrabold text-2xl text-white group-hover:text-indigo-200 transition-colors"><?= $loc['name'] ?></h3>
                     <p class="text-indigo-200 text-xs font-medium"><?= $loc['desc'] ?></p>
                 </div>
             </a>
@@ -250,19 +274,19 @@ require_once APPPATH . 'Views/layouts/header.php';
         </div>
     </section>
 
-    <!-- 5. WHY CHOOSE – refined -->
+    <!-- 5. WHY CHOOSE – refined with scroll reveal -->
     <section class="bg-white/70 py-20 border-y border-gray-100/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-            <div class="text-center"><span class="text-xs font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-4 py-1.5 rounded-full border border-indigo-100">our promise</span><h2 class="text-4xl font-black text-gray-900 mt-3">Why Sharda Properties</h2><p class="text-gray-500 text-sm">Expertise + legal transparency</p></div>
+            <div class="text-center scroll-reveal"><span class="text-xs font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-4 py-1.5 rounded-full border border-indigo-100">our promise</span><h2 class="text-4xl font-black text-gray-900 mt-3">Why Sharda Properties</h2><p class="text-gray-500 text-sm">Expertise + legal transparency</p></div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <?php $reasons = [
                     ['icon' => 'shield-check', 'title' => '100% Verified Titles', 'desc' => 'Legal clearance & 7/12 record verification for every plot and flat.'],
                     ['icon' => 'percent', 'title' => 'Zero Hidden Fees', 'desc' => 'Full price transparency, no vague contract terms during registration.'],
                     ['icon' => 'user-check', 'title' => 'Expert Advisory', 'desc' => 'Dedicated consultants helping buyers and investors make smart choices.'],
                     ['icon' => 'landmark', 'title' => 'Home Loan Assistance', 'desc' => 'Fast-track processing with HDFC, ICICI, SBI, Axis Bank.'],
-                ]; foreach ($reasons as $r): ?>
-                <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-soft space-y-4 hover:shadow-lg transition-smooth">
-                    <div class="bg-indigo-50 text-indigo-700 p-3.5 rounded-2xl inline-block"><i data-lucide="<?= $r['icon'] ?>" class="h-7 w-7"></i></div>
+                ]; foreach ($reasons as $idx => $r): ?>
+                <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-soft space-y-4 hover:shadow-lg transition-smooth scroll-reveal delay-<?= ($idx + 1) * 100 ?> card-hover-smooth">
+                    <div class="bg-indigo-50 text-indigo-700 p-3.5 rounded-2xl inline-block group-hover:bg-indigo-600 group-hover:text-white transition-colors"><i data-lucide="<?= $r['icon'] ?>" class="h-7 w-7"></i></div>
                     <h3 class="font-bold text-gray-900 text-xl"><?= $r['title'] ?></h3>
                     <p class="text-gray-500 text-sm leading-relaxed"><?= $r['desc'] ?></p>
                 </div>

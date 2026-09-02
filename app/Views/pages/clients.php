@@ -82,9 +82,9 @@ require_once APPPATH . 'Views/layouts/header.php';
     <div class="bg-indigo-900 text-white py-16 px-4 text-center relative overflow-hidden">
         <div class="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center"></div>
         <div class="relative z-10 max-w-4xl mx-auto space-y-3">
-            <span class="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-xs font-semibold tracking-wider uppercase border border-white/10">Trusted Reviews</span>
-            <h1 class="text-4xl font-extrabold tracking-tight">Our Clients & Testimonials</h1>
-            <p class="text-lg text-indigo-100 max-w-2xl mx-auto font-light">
+            <span class="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-xs font-semibold tracking-wider uppercase border border-white/10 animate-fade-in-up">Trusted Reviews</span>
+            <h1 class="text-4xl font-extrabold tracking-tight animate-fade-in-up delay-100">Our Clients & Testimonials</h1>
+            <p class="text-lg text-indigo-100 max-w-2xl mx-auto font-light animate-fade-in-up delay-200">
                 Building lifelong relationships based on trust, authenticity, and successful real estate investments.
             </p>
         </div>
@@ -256,6 +256,7 @@ require_once APPPATH . 'Views/layouts/header.php';
         }
 
         if (typeof lucide !== 'undefined') lucide.createIcons();
+        if (typeof initScrollReveal === 'function') initScrollReveal();
         if (window.TopLoader) window.TopLoader.complete();
     }
 

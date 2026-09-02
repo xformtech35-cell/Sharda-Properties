@@ -13,7 +13,8 @@ class Testimonials extends BaseController
             $driver = strtolower($db->getPlatform());
             $pkSyntax = str_contains($driver, 'sqlite') ? 'INTEGER PRIMARY KEY AUTOINCREMENT' : 'INT AUTO_INCREMENT PRIMARY KEY';
 
-            $db->query("CREATE TABLE IF NOT EXISTS testimonials (
+            $tableName = $db->prefixTable('testimonials');
+            $db->query("CREATE TABLE IF NOT EXISTS {$tableName} (
                 id {$pkSyntax},
                 name VARCHAR(255) NOT NULL,
                 role VARCHAR(255) NOT NULL,
@@ -21,36 +22,6 @@ class Testimonials extends BaseController
                 content TEXT NOT NULL,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )");
-
-            $builder = $db->table('testimonials');
-            if ($builder->countAllResults(false) === 0) {
-                $builder->insertBatch([
-                    [
-                        'name' => 'Rajesh Kulkarni',
-                        'role' => 'Homeowner, City Center',
-                        'rating' => 5,
-                        'content' => 'Sharda Properties made our dream of owning a 3BHK flat completely seamless. Their documentation process was transparent and stress-free!'
-                    ],
-                    [
-                        'name' => 'Priya Sharma',
-                        'role' => 'Investor, NA Plot Owner',
-                        'rating' => 5,
-                        'content' => 'Finding an authentic NA plot with legal clearance can be tough. Sharda Properties provided clear title verification and smooth registration.'
-                    ],
-                    [
-                        'name' => 'Amit Mehta',
-                        'role' => 'Commercial Tenant',
-                        'rating' => 5,
-                        'content' => 'We leased a prime commercial office through Sharda Properties. Professional support and excellent negotiation!'
-                    ],
-                    [
-                        'name' => 'Sunil Joshi',
-                        'role' => 'NA Plot Buyer, Green Valley',
-                        'rating' => 5,
-                        'content' => 'Exceptional legal verification and plot layout planning. Highly recommended real estate consultancy!'
-                    ]
-                ]);
-            }
         } catch (\Throwable $e) {}
     }
 

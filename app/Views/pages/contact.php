@@ -12,8 +12,8 @@ require_once APPPATH . 'Views/layouts/header.php';
     <div class="bg-indigo-900 text-white py-16 px-4 text-center relative overflow-hidden">
         <div class="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center"></div>
         <div class="relative z-10 max-w-4xl mx-auto">
-            <h1 class="text-4xl font-extrabold tracking-tight">Contact Us</h1>
-            <p class="mt-4 text-lg text-indigo-100 max-w-2xl mx-auto">
+            <h1 class="text-4xl font-extrabold tracking-tight animate-fade-in-up">Contact Us</h1>
+            <p class="mt-4 text-lg text-indigo-100 max-w-2xl mx-auto animate-fade-in-up delay-100">
                 Have questions about a property or want to sell with us? Get in touch today.
             </p>
         </div>

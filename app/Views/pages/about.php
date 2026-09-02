@@ -1,26 +1,8 @@
 <?php
 require_once APPPATH . 'Views/config.php';
 
-$testimonials = fetch_api_data('testimonials') ?? [
-    [
-        'name' => 'Rajesh Kulkarni',
-        'role' => 'Homeowner, City Center',
-        'rating' => 5,
-        'content' => 'Sharda Properties made our dream of owning a 3BHK flat completely seamless. Their documentation process was transparent and stress-free!'
-    ],
-    [
-        'name' => 'Priya Sharma',
-        'role' => 'Investor, NA Plot Owner',
-        'rating' => 5,
-        'content' => 'Finding an authentic NA plot with legal clearance can be tough. Sharda Properties provided clear title verification and smooth registration.'
-    ],
-    [
-        'name' => 'Amit Mehta',
-        'role' => 'Commercial Tenant',
-        'rating' => 5,
-        'content' => 'We leased a prime commercial office through Sharda Properties. Professional support and excellent negotiation!'
-    ]
-];
+$db_testimonials = fetch_api_data('testimonials');
+$testimonials = $db_testimonials ?? [];
 
 $page_title = 'About Us - Sharda Properties | Leading Real Estate Consultancy';
 $page_description = 'Learn about Sharda Properties, our vision, mission, and core values in providing trusted real estate consulting, NA plots, flats, and commercial offices.';
@@ -30,18 +12,18 @@ require_once APPPATH . 'Views/layouts/header.php';
 
 <div class="bg-gray-50 min-h-screen pb-16">
     <!-- Page Header with refined overlay and gradient -->
-    <div class="relative bg-gradient-to-br from-indigo-900 via-indigo-800 to-indigo-700 text-white py-20 px-4 text-center overflow-hidden">
-        <!-- Abstract background shapes -->
-        <div class="absolute inset-0 opacity-20">
-            <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-            <div class="absolute bottom-0 left-0 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+    <div class="relative bg-gradient-to-br from-indigo-950 via-indigo-900 to-indigo-800 text-white py-20 px-4 text-center overflow-hidden hero-section">
+        <!-- Abstract background glowing shapes -->
+        <div class="absolute inset-0 opacity-20 pointer-events-none">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl -translate-y-1/2 translate-x-1/2 animate-pulse"></div>
+            <div class="absolute bottom-0 left-0 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl translate-y-1/2 -translate-x-1/2 animate-pulse" style="animation-delay: 2s;"></div>
         </div>
         <div class="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center"></div>
-        <div class="relative z-10 max-w-4xl mx-auto">
-            <span class="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-xs font-semibold tracking-wider uppercase mb-4 border border-white/10">Trusted Since 2010</span>
-            <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight leading-tight">About Sharda Properties</h1>
-            <div class="w-24 h-1.5 bg-indigo-300 mx-auto mt-6 rounded-full"></div>
-            <p class="mt-6 text-lg md:text-xl text-indigo-100/90 max-w-2xl mx-auto font-light">
+        <div class="relative z-10 max-w-4xl mx-auto space-y-4">
+            <span class="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-xs font-semibold tracking-wider uppercase border border-white/10 animate-fade-in-up">Trusted Since 2010</span>
+            <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight leading-tight animate-fade-in-up delay-100">About Sharda Properties</h1>
+            <div class="w-24 h-1.5 bg-indigo-400 mx-auto mt-4 rounded-full animate-fade-in-up delay-150"></div>
+            <p class="mt-4 text-lg md:text-xl text-indigo-100/90 max-w-2xl mx-auto font-light leading-relaxed animate-fade-in-up delay-200">
                 Your premium real estate partner helping you find properties that suit your lifestyle and business requirements.
             </p>
         </div>
@@ -51,8 +33,8 @@ require_once APPPATH . 'Views/layouts/header.php';
 
         <!-- Intro Grid with improved visual hierarchy -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div class="space-y-6 order-2 md:order-1">
-                <span class="inline-block text-indigo-600 font-semibold text-sm tracking-widest uppercase bg-indigo-50 px-4 py-1.5 rounded-full">Who We Are</span>
+            <div class="space-y-6 order-2 md:order-1 scroll-reveal-left">
+                <span class="inline-block text-indigo-600 font-semibold text-sm tracking-widest uppercase bg-indigo-50 px-4 py-1.5 rounded-full border border-indigo-100">Who We Are</span>
                 <h2 class="text-4xl font-extrabold text-gray-900 leading-tight">Building Dreams,<br>Delivering Trust</h2>
                 <p class="text-gray-600 leading-relaxed text-lg">
                     Sharda Properties is a leading real estate consultancy and listing service provider. We offer comprehensive real estate solutions, specializing in NA (Non-Agricultural) plots, residential flats, luxury villas, and modern commercial offices.
@@ -62,26 +44,26 @@ require_once APPPATH . 'Views/layouts/header.php';
                 </p>
                 <div class="flex items-center gap-6 pt-4">
                     <div class="flex items-center gap-2">
-                        <span class="h-2 w-2 rounded-full bg-indigo-600"></span>
-                        <span class="text-sm font-medium text-gray-700">1000+ Happy Clients</span>
+                        <span class="h-2.5 w-2.5 rounded-full bg-indigo-600 animate-pulse"></span>
+                        <span class="text-sm font-semibold text-gray-700">1000+ Happy Clients</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <span class="h-2 w-2 rounded-full bg-indigo-600"></span>
-                        <span class="text-sm font-medium text-gray-700">500+ Properties Sold</span>
+                        <span class="h-2.5 w-2.5 rounded-full bg-indigo-600 animate-pulse"></span>
+                        <span class="text-sm font-semibold text-gray-700">500+ Properties Sold</span>
                     </div>
                 </div>
             </div>
-            <div class="order-1 md:order-2 relative">
-                <div class="rounded-2xl overflow-hidden shadow-2xl ring-1 ring-gray-200/50 h-96 bg-gray-200 relative">
+            <div class="order-1 md:order-2 relative group scroll-reveal-right">
+                <div class="rounded-3xl overflow-hidden shadow-2xl ring-1 ring-gray-200/50 h-96 bg-gray-200 relative">
                     <img
                         src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80"
                         alt="Real estate office"
-                        class="w-full h-full object-cover" />
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 </div>
                 <!-- floating badge -->
-                <div class="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-xl px-5 py-3 border border-gray-100 hidden sm:flex items-center gap-3">
-                    <div class="bg-indigo-100 p-2 rounded-full text-indigo-600">
-                        <i data-lucide="medal" class="h-5 w-5"></i>
+                <div class="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-xl px-5 py-3 border border-gray-100 hidden sm:flex items-center gap-3 card-hover-smooth animate-fade-in-up delay-300">
+                    <div class="bg-indigo-100 p-2.5 rounded-xl text-indigo-600">
+                        <i data-lucide="medal" class="h-6 w-6"></i>
                     </div>
                     <div>
                         <p class="text-xs text-gray-500 font-medium">Award Winning</p>
@@ -93,22 +75,22 @@ require_once APPPATH . 'Views/layouts/header.php';
 
         <!-- Vision & Mission with enhanced cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="group bg-white p-10 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-shadow duration-300 space-y-5 relative overflow-hidden">
+            <div class="group bg-white p-10 rounded-3xl border border-gray-100 shadow-sm card-hover-smooth scroll-reveal delay-100 space-y-5 relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-indigo-50 rounded-full opacity-50"></div>
-                <div class="bg-indigo-50 p-3.5 rounded-2xl inline-block text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
+                <div class="bg-indigo-50 p-3.5 rounded-2xl inline-block text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white group-hover:scale-110 transition-all duration-300 shadow-xs">
                     <i data-lucide="eye" class="h-7 w-7"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-900">Our Vision</h3>
+                <h3 class="text-2xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">Our Vision</h3>
                 <p class="text-gray-600 leading-relaxed text-base">
                     To be the most trusted and reliable name in real estate services, recognized globally for establishing benchmarks in customer satisfaction, legal authenticity, and transparent transactions.
                 </p>
             </div>
-            <div class="group bg-white p-10 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-shadow duration-300 space-y-5 relative overflow-hidden">
+            <div class="group bg-white p-10 rounded-3xl border border-gray-100 shadow-sm card-hover-smooth scroll-reveal delay-200 space-y-5 relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-indigo-50 rounded-full opacity-50"></div>
-                <div class="bg-indigo-50 p-3.5 rounded-2xl inline-block text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
+                <div class="bg-indigo-50 p-3.5 rounded-2xl inline-block text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white group-hover:scale-110 transition-all duration-300 shadow-xs">
                     <i data-lucide="compass" class="h-7 w-7"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-900">Our Mission</h3>
+                <h3 class="text-2xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">Our Mission</h3>
                 <p class="text-gray-600 leading-relaxed text-base">
                     To deliver premium quality real estate guidance and curate the best deals for our clients. We strive to make property acquisition simple, safe, and efficient using verified records and expert consulting.
                 </p>
@@ -117,40 +99,38 @@ require_once APPPATH . 'Views/layouts/header.php';
 
         <!-- Core Values with refined styling -->
         <div class="bg-white p-10 md:p-14 rounded-3xl border border-gray-100 shadow-sm">
-            <div class="text-center max-w-2xl mx-auto mb-12">
-                <span class="inline-block text-indigo-600 font-semibold text-sm tracking-widest uppercase bg-indigo-50 px-4 py-1.5 rounded-full">What Drives Us</span>
+            <div class="text-center max-w-2xl mx-auto mb-12 scroll-reveal">
+                <span class="inline-block text-indigo-600 font-semibold text-sm tracking-widest uppercase bg-indigo-50 px-4 py-1.5 rounded-full border border-indigo-100">What Drives Us</span>
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-4">Our Core Values</h2>
                 <div class="w-16 h-1 bg-indigo-600 mx-auto mt-4 rounded-full"></div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-10">
-                <div class="text-center space-y-4 p-6 rounded-2xl hover:bg-gray-50 transition-colors duration-200">
-                    <div class="bg-indigo-50 p-4 rounded-2xl inline-block text-indigo-600 mx-auto ring-8 ring-indigo-50/50">
+                <div class="group text-center space-y-4 p-6 rounded-2xl hover:bg-gray-50 transition-all duration-300 scroll-reveal delay-100 card-hover-smooth">
+                    <div class="bg-indigo-50 p-4 rounded-2xl inline-block text-indigo-600 mx-auto ring-8 ring-indigo-50/50 group-hover:bg-indigo-600 group-hover:text-white group-hover:scale-110 transition-all duration-300">
                         <i data-lucide="award" class="h-8 w-8"></i>
                     </div>
-                    <h4 class="font-bold text-gray-800 text-xl">Trust & Integrity</h4>
+                    <h4 class="font-bold text-gray-800 text-xl group-hover:text-indigo-600 transition-colors">Trust & Integrity</h4>
                     <p class="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto">We maintain absolute honesty and compliance in all our agreements and listing verification processes.</p>
                 </div>
-                <div class="text-center space-y-4 p-6 rounded-2xl hover:bg-gray-50 transition-colors duration-200">
-                    <div class="bg-indigo-50 p-4 rounded-2xl inline-block text-indigo-600 mx-auto ring-8 ring-indigo-50/50">
+                <div class="group text-center space-y-4 p-6 rounded-2xl hover:bg-gray-50 transition-all duration-300 scroll-reveal delay-200 card-hover-smooth">
+                    <div class="bg-indigo-50 p-4 rounded-2xl inline-block text-indigo-600 mx-auto ring-8 ring-indigo-50/50 group-hover:bg-indigo-600 group-hover:text-white group-hover:scale-110 transition-all duration-300">
                         <i data-lucide="users" class="h-8 w-8"></i>
                     </div>
-                    <h4 class="font-bold text-gray-800 text-xl">Customer Centric</h4>
+                    <h4 class="font-bold text-gray-800 text-xl group-hover:text-indigo-600 transition-colors">Customer Centric</h4>
                     <p class="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto">Your goals are our priorities. We find the right properties that match your specifications and budget.</p>
                 </div>
-                <div class="text-center space-y-4 p-6 rounded-2xl hover:bg-gray-50 transition-colors duration-200">
-                    <div class="bg-indigo-50 p-4 rounded-2xl inline-block text-indigo-600 mx-auto ring-8 ring-indigo-50/50">
+                <div class="group text-center space-y-4 p-6 rounded-2xl hover:bg-gray-50 transition-all duration-300 scroll-reveal delay-300 card-hover-smooth">
+                    <div class="bg-indigo-50 p-4 rounded-2xl inline-block text-indigo-600 mx-auto ring-8 ring-indigo-50/50 group-hover:bg-indigo-600 group-hover:text-white group-hover:scale-110 transition-all duration-300">
                         <i data-lucide="eye" class="h-8 w-8"></i>
                     </div>
-                    <h4 class="font-bold text-gray-800 text-xl">Transparency</h4>
+                    <h4 class="font-bold text-gray-800 text-xl group-hover:text-indigo-600 transition-colors">Transparency</h4>
                     <p class="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto">No hidden charges or vague contract details. We keep every party fully informed at every stage.</p>
                 </div>
             </div>
         </div>
 
-      
-
-        <!-- INTERACTIVE TESTIMONIALS SLIDER SECTION (SAME AS HOMEPAGE) -->
-        <div class="bg-indigo-950 text-white py-16 rounded-3xl relative overflow-hidden shadow-2xl">
+        <!-- INTERACTIVE TESTIMONIALS SLIDER SECTION -->
+        <section class="bg-indigo-950 text-white py-16 rounded-3xl relative overflow-hidden shadow-2xl">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 relative z-10">
                 <div class="text-center max-w-2xl mx-auto space-y-2">
                     <span class="text-xs font-bold text-indigo-300 uppercase tracking-widest bg-indigo-900/60 px-4 py-1.5 rounded-full border border-indigo-800">Client Reviews</span>
@@ -203,7 +183,7 @@ require_once APPPATH . 'Views/layouts/header.php';
                 </div>
 
             </div>
-        </div>
+        </section>
 
         <!-- Leadership Team
         <div class="bg-white p-10 md:p-14 rounded-3xl border border-gray-100 shadow-sm">
@@ -272,6 +252,10 @@ require_once APPPATH . 'Views/layouts/header.php';
                     dot.className = 'about-slider-dot w-3 h-3 rounded-full bg-indigo-800 transition-all cursor-pointer';
                 }
             });
+
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                lucide.createIcons();
+            }
 
             currentIndex = index;
         }

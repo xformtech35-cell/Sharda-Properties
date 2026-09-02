@@ -48,6 +48,18 @@ if (!function_exists('fetch_api_data')) {
             if ($endpoint === 'testimonials') {
                 return $db->table('testimonials')->orderBy('id', 'DESC')->get()->getResultArray();
             }
+
+            if ($endpoint === 'partners') {
+                return $db->table('partners')->orderBy('id', 'DESC')->get()->getResultArray();
+            }
+
+            if ($endpoint === 'categories') {
+                $builder = $db->table('categories');
+                if (!empty($params['type'])) {
+                    $builder->where('type', $params['type']);
+                }
+                return $builder->orderBy('id', 'ASC')->get()->getResultArray();
+            }
         } catch (\Throwable $e) {}
 
         // HTTP API fetch fallback
