@@ -318,7 +318,7 @@ function nav_active_class($path, $param_key = '', $param_val = '') {
             <a href="<?= base_url('clients') ?>" class="block <?= nav_active_class('clients') ?>">Clients</a>
             <a href="<?= base_url('partners') ?>" class="block <?= nav_active_class('partners') ?>">Partners</a>
             <a href="<?= base_url('contact') ?>" class="block <?= nav_active_class('contact') ?>">Contact Us</a>
-            <div class="pt-2 border-t border-gray-100 pb-4">
+            <div id="mobileAuthContainer" class="pt-2 border-t border-gray-100 pb-4">
                 <a href="<?= base_url('login') ?>" id="mobileNavLoginBtn" class="flex items-center justify-center gap-2 bg-indigo-600 text-white py-2.5 rounded-xl text-xs font-bold shadow-sm">
                     <i data-lucide="log-in" class="h-4 w-4"></i> Admin Portal
                 </a>
@@ -385,7 +385,7 @@ function nav_active_class($path, $param_key = '', $param_val = '') {
             // Auth State Navigation Handler
             const token = localStorage.getItem('token');
             const authContainer = document.getElementById('navAuthContainer');
-            const mobileLoginBtn = document.getElementById('mobileNavLoginBtn');
+            const mobileAuthContainer = document.getElementById('mobileAuthContainer');
             const adminHref = '<?= base_url('admin') ?>';
 
             if (token && authContainer) {
@@ -395,15 +395,23 @@ function nav_active_class($path, $param_key = '', $param_val = '') {
                         <i data-lucide="layout-dashboard" class="h-4 w-4"></i> Dashboard
                     </a>
                     <button onclick="handleNavLogout()" class="text-xs font-bold text-red-600 hover:bg-red-50 p-2 rounded-xl transition-colors cursor-pointer" title="Sign Out">
-                        <i data-lucide="log-out" class="h-4 w-4"></i>
+                        <i data-lucide="log-out" class="h-4 w-4"></i> Logout
                     </button>
                     </div>
                 `;
             }
 
-            if (token && mobileLoginBtn) {
-                mobileLoginBtn.href = adminHref;
-                mobileLoginBtn.innerHTML = `<i data-lucide="layout-dashboard" class="h-4 w-4"></i> Admin Dashboard`;
+            if (token && mobileAuthContainer) {
+                mobileAuthContainer.innerHTML = `
+                    <div class="flex items-center gap-2 pt-2 border-t border-gray-100 pb-2">
+                        <a href="${adminHref}" class="flex-1 flex items-center justify-center gap-2 bg-indigo-600 text-white py-2.5 rounded-xl text-xs font-bold shadow-sm hover:bg-indigo-700 transition-all">
+                            <i data-lucide="layout-dashboard" class="h-4 w-4"></i> Dashboard
+                        </a>
+                        <button onclick="handleNavLogout()" class="flex items-center justify-center gap-1.5 bg-red-50 text-red-600 border border-red-200 px-4 py-2.5 rounded-xl text-xs font-bold hover:bg-red-100 transition-colors cursor-pointer" title="Sign Out">
+                            <i data-lucide="log-out" class="h-4 w-4"></i> Logout
+                        </button>
+                    </div>
+                `;
             }
 
             if (typeof lucide !== 'undefined') lucide.createIcons();
