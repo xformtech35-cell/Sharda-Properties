@@ -1,7 +1,7 @@
 <?php require_once APPPATH . 'Views/config.php'; ?>
 <?= $this->include('layouts/header') ?>
 
-<div class="min-h-[80vh] bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+<div class="min-h-[80vh] bg-gray-50 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md text-center animate-fade-in-up">
         <div class="inline-flex bg-indigo-100 p-3 rounded-full text-indigo-600 mb-4">
             <i data-lucide="home" class="h-8 w-8"></i>

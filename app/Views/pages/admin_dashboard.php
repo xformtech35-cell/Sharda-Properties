@@ -23,7 +23,7 @@
             </div>
 
             <!-- Navigation Links -->
-            <nav class="space-y-1.5" id="sidebarNav">
+            <nav class="hidden md:block space-y-1.5" id="sidebarNav">
                 <button id="tabPropertiesBtn" class="sidebar-nav-btn active w-full flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-bold transition-all text-white bg-indigo-800/90 shadow-sm cursor-pointer">
                     <div class="flex items-center gap-3">
                         <i data-lucide="home" class="h-4 w-4"></i> Properties
@@ -704,6 +704,11 @@
         if (target.panel) {
             target.panel.classList.remove('hidden');
             target.panel.classList.add('animate-fade-in');
+        }
+
+        const sidebarNavElem = document.getElementById('sidebarNav');
+        if (window.innerWidth < 768 && sidebarNavElem && !sidebarNavElem.classList.contains('hidden')) {
+            sidebarNavElem.classList.add('hidden');
         }
 
         try {

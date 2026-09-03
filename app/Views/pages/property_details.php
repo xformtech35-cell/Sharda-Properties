@@ -130,7 +130,7 @@ require_once APPPATH . 'Views/layouts/header.php';
             <div class="lg:col-span-2 space-y-6">
                 <!-- Image Container -->
                 <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
-                    <div class="h-[400px] sm:h-[500px] relative bg-gray-100">
+                    <div class="h-[260px] xs:h-[320px] sm:h-[400px] md:h-[500px] relative bg-gray-100">
                         <img
                             src="<?= htmlspecialchars(get_image_url($property['image_url'])) ?>"
                             alt="<?= htmlspecialchars($property['title']) ?>"
@@ -144,7 +144,7 @@ require_once APPPATH . 'Views/layouts/header.php';
                 </div>
 
                 <!-- Core Info -->
-                <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-md border border-gray-100 space-y-6">
+                <div class="bg-white rounded-2xl p-4 sm:p-8 shadow-md border border-gray-100 space-y-6">
                     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                         <div>
                             <h1 class="text-2xl sm:text-3xl font-bold text-gray-900"><?= htmlspecialchars($property['title']) ?></h1>
@@ -160,13 +160,13 @@ require_once APPPATH . 'Views/layouts/header.php';
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <div class="text-3xl font-extrabold text-indigo-600 whitespace-nowrap">
+                        <div class="text-2xl sm:text-3xl font-extrabold text-indigo-600 whitespace-nowrap">
                             <?= format_price($property['price'], $property['purpose']) ?>
                         </div>
                     </div>
 
                     <!-- Specs Row -->
-                    <div class="flex flex-wrap gap-6 text-gray-600 border-t border-b border-gray-100 py-4">
+                    <div class="flex flex-wrap items-center gap-4 sm:gap-6 text-gray-600 border-t border-b border-gray-100 py-4">
                         <div class="flex items-center gap-2">
                             <i data-lucide="bed" class="h-5 w-5 text-indigo-500"></i>
                             <div>
@@ -174,7 +174,7 @@ require_once APPPATH . 'Views/layouts/header.php';
                                 <span class="text-xs text-gray-500">Bedrooms</span>
                             </div>
                         </div>
-                        <div class="h-10 w-px bg-gray-200 self-center"></div>
+                        <div class="hidden sm:block h-10 w-px bg-gray-200 self-center"></div>
                         <div class="flex items-center gap-2">
                             <i data-lucide="bath" class="h-5 w-5 text-indigo-500"></i>
                             <div>
@@ -182,7 +182,7 @@ require_once APPPATH . 'Views/layouts/header.php';
                                 <span class="text-xs text-gray-500">Bathrooms</span>
                             </div>
                         </div>
-                        <div class="h-10 w-px bg-gray-200 self-center"></div>
+                        <div class="hidden sm:block h-10 w-px bg-gray-200 self-center"></div>
                         <div class="flex items-center gap-2">
                             <i data-lucide="maximize" class="h-5 w-5 text-indigo-500"></i>
                             <div>
@@ -216,7 +216,7 @@ require_once APPPATH . 'Views/layouts/header.php';
                             </a>
                             <?php endif; ?>
                         </div>
-                        <div class="h-[350px] w-full rounded-xl overflow-hidden border border-gray-200 shadow-sm relative bg-gray-50">
+                        <div class="h-[250px] sm:h-[350px] w-full rounded-xl overflow-hidden border border-gray-200 shadow-sm relative bg-gray-50">
                             <iframe
                                 src="<?= esc($mapSrc) ?>"
                                 width="100%"

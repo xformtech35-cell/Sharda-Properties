@@ -93,10 +93,10 @@ if (!function_exists('get_category_label')) {
                     />
                 </div>
                 
-                <div class="flex flex-wrap items-center px-2 gap-2">
+                <div class="flex flex-wrap sm:flex-nowrap items-center px-2 gap-2">
                     <select
                         name="category"
-                        class="py-2.5 bg-gray-50 text-gray-700 focus:outline-none text-xs font-semibold cursor-pointer border border-gray-200 rounded-xl px-3 hover:bg-gray-100 transition"
+                        class="flex-1 min-w-[110px] w-full sm:w-auto py-2.5 bg-gray-50 text-gray-700 focus:outline-none text-xs font-semibold cursor-pointer border border-gray-200 rounded-xl px-3 hover:bg-gray-100 transition"
                         onchange="this.form.submit()"
                     >
                         <option value="">All Categories</option>
@@ -107,7 +107,7 @@ if (!function_exists('get_category_label')) {
 
                     <select
                         name="purpose"
-                        class="py-2.5 bg-gray-50 text-gray-700 focus:outline-none text-xs font-semibold cursor-pointer border border-gray-200 rounded-xl px-3 hover:bg-gray-100 transition"
+                        class="flex-1 min-w-[110px] w-full sm:w-auto py-2.5 bg-gray-50 text-gray-700 focus:outline-none text-xs font-semibold cursor-pointer border border-gray-200 rounded-xl px-3 hover:bg-gray-100 transition"
                         onchange="this.form.submit()"
                     >
                         <option value="">All Purposes</option>
@@ -117,7 +117,7 @@ if (!function_exists('get_category_label')) {
 
                     <select
                         name="property_type"
-                        class="py-2.5 bg-gray-50 text-gray-700 focus:outline-none text-xs font-semibold cursor-pointer border border-gray-200 rounded-xl px-3 hover:bg-gray-100 transition"
+                        class="flex-1 min-w-[110px] w-full sm:w-auto py-2.5 bg-gray-50 text-gray-700 focus:outline-none text-xs font-semibold cursor-pointer border border-gray-200 rounded-xl px-3 hover:bg-gray-100 transition"
                         onchange="this.form.submit()"
                     >
                         <option value="">All Types</option>
@@ -128,7 +128,7 @@ if (!function_exists('get_category_label')) {
 
                 <button
                     type="submit"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3.5 rounded-xl font-bold text-sm transition-all cursor-pointer shrink-0 shadow-md flex items-center justify-center gap-2 hover:scale-102"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3.5 rounded-xl font-bold text-sm transition-all cursor-pointer shrink-0 shadow-md flex items-center justify-center gap-2 hover:scale-102 w-full md:w-auto"
                 >
                     <i data-lucide="search" class="h-4 w-4"></i> Search
                 </button>
@@ -168,7 +168,7 @@ if (!function_exists('get_category_label')) {
                 </a>
             </div>
         <?php else: ?>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 <?php foreach ($properties as $index => $property): ?>
                     <div class="group bg-white rounded-2xl shadow-md card-hover-smooth scroll-reveal delay-<?= (($index % 6) + 1) * 100 ?> overflow-hidden border border-gray-100 flex flex-col">
                         <div class="relative h-60 bg-gray-100 overflow-hidden shrink-0">
@@ -203,17 +203,17 @@ if (!function_exists('get_category_label')) {
                             </div>
 
                             <div>
-                                <div class="flex justify-between items-center text-gray-600 text-xs font-semibold border-t border-b border-gray-100 py-3 mb-4 shrink-0">
-                                    <div class="flex items-center gap-1.5">
-                                        <i data-lucide="bed" class="h-4 w-4 text-indigo-500"></i>
+                                <div class="flex justify-between items-center text-gray-600 text-xs font-semibold border-t border-b border-gray-100 py-3 mb-4 shrink-0 gap-1.5 sm:gap-3">
+                                    <div class="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs">
+                                        <i data-lucide="bed" class="h-4 w-4 text-indigo-500 shrink-0"></i>
                                         <span><?= htmlspecialchars($property['bedrooms']) ?> Beds</span>
                                     </div>
-                                    <div class="flex items-center gap-1.5">
-                                        <i data-lucide="bath" class="h-4 w-4 text-indigo-500"></i>
+                                    <div class="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs">
+                                        <i data-lucide="bath" class="h-4 w-4 text-indigo-500 shrink-0"></i>
                                         <span><?= htmlspecialchars($property['bathrooms']) ?> Baths</span>
                                     </div>
-                                    <div class="flex items-center gap-1.5">
-                                        <i data-lucide="maximize" class="h-4 w-4 text-indigo-500"></i>
+                                    <div class="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs">
+                                        <i data-lucide="maximize" class="h-4 w-4 text-indigo-500 shrink-0"></i>
                                         <span><?= htmlspecialchars($property['area']) ?> sqft</span>
                                     </div>
                                 </div>

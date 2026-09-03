@@ -26,7 +26,7 @@ $partner_categories = fetch_api_data('categories', ['type' => 'partner']) ?? [];
             <div class="inline-flex items-center gap-2 bg-indigo-800/60 backdrop-blur-md px-5 py-2 rounded-full border border-white/20 text-xs font-bold uppercase tracking-widest text-indigo-200 animate-fade-in-up">
                 <span class="w-2.5 h-2.5 bg-emerald-400 rounded-full inline-block animate-pulse"></span> Network & Collaborators
             </div>
-            <h1 class="text-4xl sm:text-6xl font-black tracking-tight leading-tight animate-fade-in-up delay-100">
+            <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight animate-fade-in-up delay-100">
                 Our Partners & <span class="gradient-text">Clients</span>
             </h1>
             <p class="text-base sm:text-xl text-indigo-100/90 max-w-2xl mx-auto font-light leading-relaxed animate-fade-in-up delay-200">
@@ -39,26 +39,26 @@ $partner_categories = fetch_api_data('categories', ['type' => 'partner']) ?? [];
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 space-y-12">
 
         <!-- Dynamic Category Filter Tabs -->
-        <div class="flex flex-wrap justify-center gap-3 scroll-reveal">
-            <button onclick="filterCategory('all')" id="tab-all" class="partner-tab-btn active px-6 py-2.5 rounded-full text-xs font-bold transition-all bg-indigo-600 text-white shadow-md cursor-pointer">
+        <div class="flex flex-wrap justify-center gap-2 sm:gap-3 scroll-reveal">
+            <button onclick="filterCategory('all')" id="tab-all" class="partner-tab-btn active px-5 sm:px-6 py-2.5 rounded-full text-xs font-bold transition-all bg-indigo-600 text-white shadow-md cursor-pointer">
                 All Partners & Clients (<?= count($partners) ?>)
             </button>
             <?php foreach ($partner_categories as $pcat): ?>
-                <button onclick="filterCategory('<?= htmlspecialchars($pcat['slug']) ?>')" id="tab-<?= htmlspecialchars($pcat['slug']) ?>" class="partner-tab-btn px-6 py-2.5 rounded-full text-xs font-bold transition-all bg-white text-gray-700 hover:bg-indigo-50 border border-gray-200 cursor-pointer">
+                <button onclick="filterCategory('<?= htmlspecialchars($pcat['slug']) ?>')" id="tab-<?= htmlspecialchars($pcat['slug']) ?>" class="partner-tab-btn px-5 sm:px-6 py-2.5 rounded-full text-xs font-bold transition-all bg-white text-gray-700 hover:bg-indigo-50 border border-gray-200 cursor-pointer">
                     <?= htmlspecialchars($pcat['name']) ?>
                 </button>
             <?php endforeach; ?>
         </div>
 
         <!-- Partners Cards Grid -->
-        <div id="partnersGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div id="partnersGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             <?php foreach ($partners as $index => $p): 
                 $cat = htmlspecialchars($p['category'] ?? 'Partner');
                 $rawLogo = trim($p['logo_url'] ?? '');
                 $logo = !empty($rawLogo) ? (str_starts_with($rawLogo, 'http') ? $rawLogo : base_url(ltrim($rawLogo, '/'))) : null;
                 $initials = strtoupper(substr($p['name'], 0, 2));
             ?>
-                <div class="partner-card group bg-white rounded-3xl p-7 border border-gray-100 shadow-soft card-hover-smooth scroll-reveal delay-<?= (($index % 6) + 1) * 100 ?> flex flex-col justify-between" data-category="<?= $cat ?>">
+                <div class="partner-card group bg-white rounded-3xl p-5 sm:p-7 border border-gray-100 shadow-soft card-hover-smooth scroll-reveal delay-<?= (($index % 6) + 1) * 100 ?> flex flex-col justify-between" data-category="<?= $cat ?>">
                     
                     <div class="space-y-5">
                         <!-- Top Header: Logo / Avatar & Category Badge -->

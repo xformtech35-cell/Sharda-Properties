@@ -229,7 +229,7 @@ function nav_active_class($path, $param_key = '', $param_val = '') {
 
         /* Smooth Mobile Drawer */
         #mobileMenuDrawer {
-            transition: max-height 0.35s ease-in-out, opacity 0.3s ease-in-out;
+            transition: max-height 0.35s ease-in-out, opacity 0.3s ease-in-out, padding 0.35s ease-in-out;
             overflow: hidden;
         }
         #mobileMenuDrawer.drawer-closed {
@@ -240,8 +240,10 @@ function nav_active_class($path, $param_key = '', $param_val = '') {
             pointer-events: none;
         }
         #mobileMenuDrawer.drawer-open {
-            max-height: 500px;
+            max-height: 650px;
             opacity: 1;
+            padding-top: 0.75rem;
+            padding-bottom: 1rem;
         }
     </style>
 </head>

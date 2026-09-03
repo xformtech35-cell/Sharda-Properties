@@ -9,21 +9,21 @@ require_once APPPATH . 'Views/layouts/header.php';
 
 <div class="bg-gray-50 min-h-screen pb-16">
     <!-- Header -->
-    <div class="bg-indigo-900 text-white py-16 px-4 text-center relative overflow-hidden">
+    <div class="bg-indigo-900 text-white py-12 sm:py-16 px-4 text-center relative overflow-hidden">
         <div class="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center"></div>
         <div class="relative z-10 max-w-4xl mx-auto">
-            <h1 class="text-4xl font-extrabold tracking-tight animate-fade-in-up">Contact Us</h1>
-            <p class="mt-4 text-lg text-indigo-100 max-w-2xl mx-auto animate-fade-in-up delay-100">
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight animate-fade-in-up">Contact Us</h1>
+            <p class="mt-3 text-base sm:text-lg text-indigo-100 max-w-2xl mx-auto animate-fade-in-up delay-100">
                 Have questions about a property or want to sell with us? Get in touch today.
             </p>
         </div>
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
             
             <!-- Contact Details Widget -->
-            <div class="lg:col-span-1 bg-white p-8 rounded-2xl border border-gray-100 shadow-sm space-y-8">
+            <div class="lg:col-span-1 bg-white p-6 sm:p-8 rounded-2xl border border-gray-100 shadow-sm space-y-8">
                 <div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2">Get in Touch</h3>
                     <p class="text-gray-500 text-sm">Feel free to contact us via phone, email, or by visiting our office.</p>
@@ -66,7 +66,7 @@ require_once APPPATH . 'Views/layouts/header.php';
             </div>
 
             <!-- Contact Form -->
-            <div class="lg:col-span-2 bg-white p-8 sm:p-10 rounded-2xl border border-gray-100 shadow-sm">
+            <div class="lg:col-span-2 bg-white p-6 sm:p-10 rounded-2xl border border-gray-100 shadow-sm">
                 <h3 class="text-2xl font-bold text-gray-900 mb-6">Send an Enquiry</h3>
                 
                 <div id="contactAlert" class="hidden mb-6 p-4 rounded-r-lg flex items-center gap-3"></div>
